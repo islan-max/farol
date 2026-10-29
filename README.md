@@ -67,7 +67,7 @@ Isto é um comentário real do Farol, feito pela Action no [PR de demonstração
 ```mermaid
 flowchart LR
     A([Você abre o PR]) --> B[O Farol lê só<br/>as linhas que você mudou]
-    B --> C{ruff<br/>ESLint}
+    B --> C(["ruff e ESLint<br/>só leem o texto"])
     C --> D[Lição em português<br/>+ exemplo real]
     D --> E([Comentário na linha])
 ```
