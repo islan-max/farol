@@ -16,6 +16,7 @@ def _locais(achados) -> str:
 
 def corpo_licao(lc: Licao) -> str:
     """A lição inteira, sem depender de onde ela foi encontrada (usado por `farol explicar`)."""
+    comentario = "#" if lc.linguagem == "python" else "//"
     partes = [
         f"**Farol · {lc.titulo}** · `{lc.codigo}` · nível {NIVEIS[lc.nivel]}",
         "",
@@ -25,11 +26,11 @@ def corpo_licao(lc: Licao) -> str:
         "",
         f"**Como corrigir.** {lc.como_corrigir}",
         "",
-        "```python",
-        "# antes",
+        f"```{lc.linguagem}",
+        f"{comentario} antes",
         lc.antes,
         "",
-        "# depois",
+        f"{comentario} depois",
         lc.depois,
         "```",
     ]
@@ -38,7 +39,7 @@ def corpo_licao(lc: Licao) -> str:
             "",
             f"**Como projetos reais resolvem.** {ex.porque}",
             "",
-            "```python",
+            f"```{lc.linguagem}",
             ex.trecho,
             "```",
             f"[{ex.repo}]({ex.permalink}) · licença {ex.licenca}",

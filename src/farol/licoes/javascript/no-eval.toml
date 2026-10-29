@@ -1,0 +1,36 @@
+codigo = "no-eval"
+ferramenta = "eslint"
+linguagem = "javascript"
+titulo = "Não use `eval`: ele executa texto como código"
+nivel = "intermediario"
+o_que_e = """
+`eval(texto)` pega um texto e o executa como se fosse código JavaScript.
+"""
+por_que_importa = """
+Se qualquer parte do texto vem de uma pessoa usuária (um campo, a URL, uma mensagem), ela passa a poder \
+executar o que quiser na sua página ou no seu servidor. É a porta de entrada dos ataques de injeção de código. \
+Além disso, o `eval` deixa o programa mais lento e mais difícil de ler e de testar.
+"""
+como_corrigir = """
+Quase sempre existe um jeito mais direto. Para ler dados, use `JSON.parse(texto)`. Para escolher o que fazer, \
+use um objeto ou um `switch` com as opções permitidas. Para uma conta, escreva a conta no código.
+"""
+antes = '''
+function ler(texto) {
+  return eval("(" + texto + ")");
+}
+'''
+depois = '''
+function ler(texto) {
+  return JSON.parse(texto);
+}
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra no-eval no ESLint"
+url = "https://eslint.org/docs/latest/rules/no-eval"
+
+[[docs]]
+titulo = "MDN: eval()"
+url = "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/eval"

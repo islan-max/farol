@@ -10,14 +10,14 @@ import re
 import sys
 
 from farol.achados import Achado
-from farol.analise import analisar
+from farol.analise import FerramentaIndisponivel, analisar
 from farol.comentarios import corpo, resumo_excedente
 from farol.diffs import build_input
 from farol.github import Api, GitHubError
 from farol.revisao import TETO_INLINE, Revisao, montar
 
 RODAPE = (
-    "<sub>Farol revisa só as linhas alteradas neste PR, com ruff e lições escritas à mão. "
+    "<sub>Farol revisa só as linhas alteradas neste PR, com ruff e ESLint e lições escritas à mão. "
     "Não usa IA. Cada regra comenta uma vez por arquivo.</sub>"
 )
 _MARCA_REGRA = re.compile(r"<!-- farol:regra:([A-Za-z0-9_-]+):([0-9a-f]{10}) -->")
@@ -49,7 +49,11 @@ def _achar(api: Api, repo_cabeca: str, sha: str, pr_files: list[dict]):
         except (GitHubError, UnicodeDecodeError) as erro:
             nao_revisados.append((arquivo.path, f"não consegui ler o arquivo ({erro})"[:120]))
             continue
-        resultado = analisar(arquivo.path, fonte, arquivo.added)
+        try:
+            resultado = analisar(arquivo.path, fonte, arquivo.added)
+        except FerramentaIndisponivel as erro:
+            nao_revisados.append((arquivo.path, str(erro)))
+            continue
         if resultado is None:
             nao_revisados.append((arquivo.path, "linguagem ainda não suportada"))
         else:

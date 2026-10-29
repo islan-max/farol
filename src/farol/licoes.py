@@ -37,6 +37,7 @@ class Licao:
     depois: str
     docs: tuple[dict, ...]
     exemplos: tuple[str, ...]  # ids em exemplos/curados.json
+    linguagem: str = "python"  # linguagem dos trechos antes/depois (para o bloco de código)
 
 
 def _ler(arquivo: Path) -> Licao:
@@ -53,6 +54,7 @@ def _ler(arquivo: Path) -> Licao:
         },
         docs=tuple(dados.get("docs", [])),
         exemplos=tuple(dados.get("exemplos", [])),
+        linguagem=dados.get("linguagem", "python"),
     )
 
 

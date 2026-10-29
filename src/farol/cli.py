@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 from farol import __version__
-from farol.analise import analisar
+from farol.analise import FerramentaIndisponivel, analisar
 from farol.comentarios import corpo, corpo_licao, resumo_excedente
 from farol.diffs import build_input, split_git_diff
 from farol.licoes import todas
@@ -44,7 +44,11 @@ def revisar(
         except (OSError, UnicodeDecodeError):
             ignorados.append((arquivo.path, "não consegui ler o arquivo"))
             continue
-        resultado = analisar(arquivo.path, fonte, arquivo.added)
+        try:
+            resultado = analisar(arquivo.path, fonte, arquivo.added)
+        except FerramentaIndisponivel as erro:
+            ignorados.append((arquivo.path, str(erro)))
+            continue
         if resultado is None:
             ignorados.append((arquivo.path, "linguagem ainda não suportada"))
         else:
@@ -89,8 +93,7 @@ def como_json(rev: Revisao, ignorados: list[tuple[str, str]]) -> str:
 
 
 def _explicar(codigo: str) -> int:
-    codigo = codigo.upper()
-    achada = next((lc for (_, c), lc in todas().items() if c == codigo), None)
+    achada = next((lc for (_, c), lc in todas().items() if c.lower() == codigo.lower()), None)
     if achada is None:
         disponiveis = ", ".join(sorted(c for _, c in todas()))
         print(f"Não tenho lição para {codigo!r}. Disponíveis: {disponiveis}", file=sys.stderr)

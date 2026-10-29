@@ -1,0 +1,44 @@
+codigo = "no-var"
+ferramenta = "eslint"
+linguagem = "javascript"
+titulo = "Prefira `let` e `const` a `var`"
+nivel = "iniciante"
+o_que_e = """
+O `var` vale para a função inteira, não só para o bloco `{ }`, e a declaração é "içada" para o topo da \
+função (hoisting), com o valor `undefined`.
+"""
+por_que_importa = """
+Uma variável criada dentro de um `if` ou de um `for` continua existindo fora dele, e usar a variável \
+antes da linha em que ela é declarada não dá erro: dá `undefined`. Isso gera bugs difíceis de achar, como o \
+clássico laço com `setTimeout` que imprime sempre o mesmo número.
+"""
+como_corrigir = """
+Use `const` por padrão e `let` quando o valor precisa mudar. Os dois respeitam o bloco onde foram declarados.
+"""
+antes = '''
+function somar(lista) {
+  var total = 0;
+  for (var i = 0; i < lista.length; i++) {
+    total += lista[i];
+  }
+  return total;
+}
+'''
+depois = '''
+function somar(lista) {
+  let total = 0;
+  for (let i = 0; i < lista.length; i++) {
+    total += lista[i];
+  }
+  return total;
+}
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra no-var no ESLint"
+url = "https://eslint.org/docs/latest/rules/no-var"
+
+[[docs]]
+titulo = "MDN: let"
+url = "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/let"
