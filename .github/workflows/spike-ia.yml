@@ -42,47 +42,66 @@ jobs:
           ollama pull "$MODELO"
           echo "TEMPO servidor: $((T1-T0))s; pull do modelo: $(( $(date +%s) - T1 ))s"
           du -sh "$HOME/.ollama"
-      - name: Gerar 5 respostas e medir tempo e memória
+      - name: Comparar modelos (tempo, memória e qualidade)
         run: |
+          export PATH="$HOME/ollama/bin:$PATH"
           python3 - <<'PYEOF'
-          import json, subprocess, time, urllib.request, threading
-          pico = 0
-          parar = False
-          def amostrar():
-              global pico
-              while not parar:
-                  out = subprocess.run("ps -eo rss,comm | awk '/ollama/ {s+=$1} END {print s+0}'", shell=True, capture_output=True, text=True).stdout
-                  pico = max(pico, int(out.strip() or 0))
-                  time.sleep(0.5)
-          threading.Thread(target=amostrar, daemon=True).start()
+          import json, subprocess, time, urllib.request
+          def usado():
+              return int(subprocess.run("free -m | awk '/Mem:/ {print $3}'", shell=True, capture_output=True, text=True).stdout)
           SISTEMA = ("Você é um mentor de programação. Responda sempre em português do Brasil, em no máximo "
-                     "duas frases curtas, sem markdown, sem listas e sem blocos de código. Não mencione "
-                     "outros problemas além do descrito.")
+                     "duas frases curtas, sem markdown, sem listas e sem blocos de código. Baseie-se só nas "
+                     "informações dadas e não invente problemas novos.")
           casos = [
-            ("`except:` sem tipo captura erro demais", "Um except sem nome de exceção captura qualquer erro, inclusive Ctrl+C.", 6, "    except:"),
-            ("Valor padrão mutável em argumento de função", "Listas usadas como valor padrão são criadas uma única vez e compartilhadas entre chamadas.", 1, "def marcar(tarefa, feitas=[]):"),
-            ("SQL montado juntando texto abre brecha para injeção de SQL", "Montar SQL colando valores permite que o valor altere a consulta.", 3, "    cursor.execute(f\"SELECT * FROM usuarios WHERE nome = '{nome}'\")"),
-            ("Não use eval: ele executa texto como código", "eval executa o texto recebido como código JavaScript.", 2, "  return eval('(' + texto + ')');"),
-            ("Variável criada e nunca usada", "Você guarda um valor em uma variável e nenhuma linha a lê depois.", 2, "    total = sum(precos) + frete"),
+            ("`except:` sem tipo captura erro demais", "Captura qualquer erro, inclusive Ctrl+C.", "Quando algo dá errado por um motivo inesperado o programa segue em silêncio.", "Nomeie o erro que você espera tratar.", 4, "Do not use bare `except`",
+             "def carregar(caminho):
+    try:
+        return open(caminho).read()
+    except:
+        return \"\""),
+            ("Valor padrão mutável em argumento de função", "A lista padrão é criada uma única vez, na definição da função.", "Todas as chamadas compartilham o mesmo objeto.", "Use None como padrão e crie a lista dentro da função.", 1, "Do not use mutable data structures for argument defaults",
+             "def marcar(tarefa, feitas=[]):
+    feitas.append(tarefa)
+    return feitas"),
+            ("SQL montado juntando texto abre brecha para injeção de SQL", "A consulta é construída colando valores no texto SQL.", "O valor pode conter SQL e mudar o que a consulta faz.", "Use parâmetros: o driver envia o valor separado do SQL.", 2, "Possible SQL injection vector through string-based query construction",
+             "def buscar(cursor, nome):
+    cursor.execute(f\"SELECT * FROM usuarios WHERE nome = '{nome}'\")
+    return cursor.fetchall()"),
+            ("Não use eval: ele executa texto como código", "eval executa um texto como código JavaScript.", "Quem controla o texto passa a executar código na sua página.", "Para ler dados, use JSON.parse(texto).", 2, "`eval` can be harmful.",
+             "function ler(texto) {
+  return eval('(' + texto + ')');
+}"),
+            ("Variável criada e nunca usada", "Você guarda um valor em uma variável e nenhuma linha a lê depois.", "Quase sempre é um resultado que você esqueceu de usar.", "Use o valor ou apague a variável.", 2, "Local variable `total` is assigned to but never used",
+             "def total_com_frete(precos, frete):
+    total = sum(precos) + frete
+    return sum(precos)"),
           ]
-          for titulo, explicacao, linha, codigo in casos:
-              pedido = {
-                "model": "qwen2.5-coder:1.5b", "stream": False,
-                "options": {"temperature": 0.2, "num_predict": 120, "num_ctx": 2048},
-                "messages": [
-                  {"role": "system", "content": SISTEMA},
-                  {"role": "user", "content": f"Regra: {titulo}\nExplicação geral: {explicacao}\nTrecho da pessoa (linha {linha}):\n{codigo}\n\nEscreva 1 ou 2 frases ligando a explicação a este trecho: o que, neste código, pode dar errado e qual é a mudança. Use os nomes que aparecem no trecho."},
-                ],
-              }
+          for modelo in ["qwen2.5-coder:1.5b", "qwen2.5-coder:3b", "qwen2.5-coder:7b"]:
               t0 = time.time()
-              req = urllib.request.Request("http://127.0.0.1:11434/api/chat", data=json.dumps(pedido).encode(), headers={"Content-Type": "application/json"})
-              r = json.load(urllib.request.urlopen(req, timeout=300))
-              dt = time.time() - t0
-              tokens = r.get("eval_count", 0)
-              print(f"--- {titulo}")
-              print(f"tempo total {dt:.1f}s | carga {r.get('load_duration',0)/1e9:.1f}s | {tokens} tokens em {r.get('eval_duration',0)/1e9:.1f}s ({tokens/max(r.get('eval_duration',1)/1e9,0.001):.1f} tok/s)")
-              print(r["message"]["content"].strip())
-          parar = True
-          print(f"PICO de memória (soma RSS dos processos ollama): {pico/1024:.0f} MB")
+              subprocess.run(["ollama", "pull", modelo], check=True, capture_output=True)
+              print(f"
+########## {modelo}: pull {time.time()-t0:.0f}s")
+              base = usado()
+              for titulo, o_que, por_que, como, linha, msg, codigo in casos:
+                  pedido = {"model": modelo, "stream": False, "keep_alive": "5m",
+                    "options": {"temperature": 0.1, "num_predict": 140, "num_ctx": 2048},
+                    "messages": [{"role": "system", "content": SISTEMA},
+                      {"role": "user", "content": f"Regra: {titulo}
+O que é: {o_que}
+Por que importa: {por_que}
+Como corrigir: {como}
+A ferramenta apontou (linha {linha}): {msg}
+
+Trecho da pessoa:
+{codigo}
+
+Escreva 2 frases curtas dirigidas a quem escreveu este trecho: o que está errado exatamente neste código (use os nomes do trecho) e qual mudança fazer."}]}
+                  t1 = time.time()
+                  req = urllib.request.Request("http://127.0.0.1:11434/api/chat", data=json.dumps(pedido).encode(), headers={"Content-Type": "application/json"})
+                  r = json.load(urllib.request.urlopen(req, timeout=600))
+                  n = r.get("eval_count", 0); d = r.get("eval_duration", 1) / 1e9
+                  print(f"--- {titulo} | {time.time()-t1:.1f}s | {n} tokens | {n/max(d,0.001):.1f} tok/s")
+                  print(r["message"]["content"].strip())
+              print(f"MEMÓRIA usada a mais com {modelo} carregado: {usado()-base} MB")
+              subprocess.run(["ollama", "stop", modelo], capture_output=True)
           PYEOF
-          free -m
