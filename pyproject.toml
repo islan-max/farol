@@ -1,0 +1,35 @@
+[project]
+name = "farol"
+version = "0.1.0"
+description = "Revisão de pull request que ensina, com explicações em português do Brasil."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+dependencies = [
+    "ruff==0.17.3",
+]
+
+[project.scripts]
+farol = "farol.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/farol"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = ["pytest>=9.1.1"]
