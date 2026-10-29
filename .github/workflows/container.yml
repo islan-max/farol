@@ -43,6 +43,7 @@ jobs:
           docker run --rm farol:teste --version
           docker run --rm --entrypoint id farol:teste -u | grep -qx 10001
           demo="$(mktemp -d)"
+          chmod 755 "$demo"  # mktemp cria com 700; o contêiner roda com outro uid e precisa ler
           git -C "$demo" init -q -b main
           git -C "$demo" -c user.email=t@t.dev -c user.name=t commit -q --allow-empty -m base
           printf 'try:\n    pass\nexcept:\n    pass\n' > "$demo/a.py"
