@@ -19,6 +19,7 @@ Ou instale uma vez: `uv tool install git+https://github.com/islan-max/farol` e u
 | `farol revisar --diff mudancas.diff` | Lê um diff pronto (`-` lê da entrada padrão). Os arquivos precisam existir na pasta atual. |
 | `farol revisar --json` | Saída para outros programas. |
 | `farol revisar --teto 5` | No máximo 5 comentários (padrão 10). |
+| `farol revisar --ia` | Acrescenta uma nota de IA local (precisa do [Ollama](https://ollama.com) rodando e do modelo: `ollama pull qwen2.5-coder:1.5b`). Sem ele, avisa e segue sem IA. `--modelo` e `--ollama` ajustam. |
 | `farol explicar E722` | Mostra a lição de uma regra (`eqeqeq`, `no-var` etc.), sem precisar de diff. |
 
 ## O que ele considera

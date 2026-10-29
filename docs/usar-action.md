@@ -29,6 +29,8 @@ Opções (`with:`):
 | Opção | Padrão | Para que serve |
 | --- | --- | --- |
 | `teto` | `10` | Máximo de comentários por linha em um PR. O que passar disso vai agrupado, por regra, no corpo da review. |
+| `ia` | `off` | `ollama` liga uma nota extra de IA local em cada comentário. Veja abaixo. |
+| `modelo` | `qwen2.5-coder:1.5b` | Modelo do Ollama usado com `ia: ollama`. |
 | `token` | `github.token` | Só mude se souber por quê. |
 
 ## O que ele faz
@@ -40,6 +42,16 @@ Opções (`with:`):
 - Arquivos gerados, `lockfile`s, binários e linguagens ainda não suportadas aparecem em "Não revisados".
 - Em arquivos de teste (`tests/`, `test_*.py`, `*_test.py`, `conftest.py`), as regras `S105`, `S110`, `S113` e `S608` não valem: senha de mentira e `except: pass` são normais ali.
 - Em JavaScript/TypeScript, parâmetros de função não usados não são apontados, e nomes começando com `_` valem como "não usado de propósito".
+
+## IA local (opcional)
+
+```yaml
+      - uses: islan-max/farol@main
+        with:
+          ia: ollama
+```
+
+O runner baixa o Ollama (conferido por sha256) e o modelo (cerca de 1 GB) e o Farol acrescenta, em cada comentário, uma nota **No seu código**, rotulada "IA local, pode errar". A IA nunca cria nem tira apontamentos, e se algo falhar o comentário sai só com a lição. Em repositório público é grátis; em **privado** consome minutos do seu plano. Medições, escolha de modelo e limites em [medicao-ia.md](medicao-ia.md).
 
 ## Linguagens
 

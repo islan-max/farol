@@ -12,14 +12,31 @@ inputs:
   teto:
     description: Máximo de comentários por linha em um PR.
     default: "10"
+  ia:
+    description: >-
+      "ollama" liga uma nota extra de IA local em cada comentário (o runner baixa o Ollama e o
+      modelo, cerca de 1 GB; em repositório privado isso conta nos minutos do seu plano).
+      "off" (padrão) não usa IA.
+    default: "off"
+  modelo:
+    description: Modelo do Ollama usado quando ia é "ollama".
+    default: "qwen2.5-coder:1.5b"
 
 runs:
   using: composite
   steps:
     - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+    - name: Instalar o Ollama e o modelo (só com ia ollama)
+      if: inputs.ia == 'ollama'
+      shell: bash
+      env:
+        MODELO: ${{ inputs.modelo }}
+      run: bash "$GITHUB_ACTION_PATH/scripts/instalar_ollama.sh" "$MODELO"
     - name: Revisar o pull request
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
         FAROL_TETO: ${{ inputs.teto }}
+        FAROL_IA: ${{ inputs.ia }}
+        FAROL_MODELO: ${{ inputs.modelo }}
       run: uv run --locked --no-dev --project "$GITHUB_ACTION_PATH" python -m farol.action

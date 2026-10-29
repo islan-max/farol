@@ -50,6 +50,14 @@ def corpo_licao(lc: Licao) -> str:
     return "\n".join(partes)
 
 
+def _com_nota(texto: str, c: Comentario) -> str:
+    if not c.nota:
+        return texto
+    titulo, _, resto = texto.partition("\n")
+    aviso = f"nota da IA local `{c.modelo}`, pode errar"
+    return f"{titulo}\n\n> **No seu código** ({aviso}): {c.nota}\n{resto}"
+
+
 def corpo(c: Comentario) -> str:
     a = c.achado
     if c.licao is None:
@@ -58,7 +66,7 @@ def corpo(c: Comentario) -> str:
         if a.url:
             partes += ["", f"[Documentação da regra]({a.url})"]
     else:
-        partes = [corpo_licao(c.licao)]
+        partes = [_com_nota(corpo_licao(c.licao), c)]
     if c.tambem:
         partes += ["", f"Também aparece em: {_locais(c.tambem)}."]
     return "\n".join(partes)

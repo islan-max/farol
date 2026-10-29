@@ -14,11 +14,12 @@ from farol.analise import FerramentaIndisponivel, analisar
 from farol.comentarios import corpo, resumo_excedente
 from farol.diffs import build_input
 from farol.github import Api, GitHubError
+from farol.ia import MODELO_PADRAO, Ollama, anotar
 from farol.revisao import TETO_INLINE, Revisao, montar
 
 RODAPE = (
     "<sub>Farol revisa só as linhas alteradas neste PR, com ruff e ESLint e lições escritas à mão. "
-    "Não usa IA. Cada regra comenta uma vez por arquivo.</sub>"
+    "As regras e as lições não vêm de IA. Cada regra comenta uma vez por arquivo.</sub>"
 )
 _MARCA_REGRA = re.compile(r"<!-- farol:regra:([A-Za-z0-9_-]+):([0-9a-f]{10}) -->")
 
@@ -43,12 +44,14 @@ def _achar(api: Api, repo_cabeca: str, sha: str, pr_files: list[dict]):
     entrada = build_input(pr_files)
     achados: list[Achado] = []
     nao_revisados = list(entrada.skipped)
+    fontes: dict[str, str] = {}
     for arquivo in entrada.files:
         try:
             fonte = api.texto_do_arquivo(repo_cabeca, arquivo.path, sha)
         except (GitHubError, UnicodeDecodeError) as erro:
             nao_revisados.append((arquivo.path, f"não consegui ler o arquivo ({erro})"[:120]))
             continue
+        fontes[arquivo.path] = fonte
         try:
             resultado = analisar(arquivo.path, fonte, arquivo.added)
         except FerramentaIndisponivel as erro:
@@ -58,7 +61,7 @@ def _achar(api: Api, repo_cabeca: str, sha: str, pr_files: list[dict]):
             nao_revisados.append((arquivo.path, "linguagem ainda não suportada"))
         else:
             achados += resultado
-    return achados, nao_revisados
+    return achados, nao_revisados, fontes
 
 
 def corpo_da_revisao(rev: Revisao, nao_revisados: list[tuple[str, str]], sha: str) -> str:
@@ -77,6 +80,14 @@ def corpo_da_revisao(rev: Revisao, nao_revisados: list[tuple[str, str]], sha: st
         if len(nao_revisados) > 10:
             linhas.append(f"- e mais {len(nao_revisados) - 10} arquivo(s)")
         linhas.append("")
+    modelos = {c.modelo for c in rev.inline if c.nota}
+    if modelos:
+        quais = ", ".join(sorted(modelos))
+        linhas += [
+            f"As notas **No seu código** foram escritas por uma IA local ({quais}) e podem errar; "
+            "a explicação da regra é sempre a lição escrita à mão.",
+            "",
+        ]
     return "\n".join([*linhas, RODAPE, marca_revisao(sha)])
 
 
@@ -119,7 +130,13 @@ def anotacoes(rev: Revisao) -> list[str]:
     return saida
 
 
-def executar(api: Api, evento: dict, caminho_resumo: str | None, teto: int = TETO_INLINE) -> int:
+def executar(
+    api: Api,
+    evento: dict,
+    caminho_resumo: str | None,
+    teto: int = TETO_INLINE,
+    ia: Ollama | None = None,
+) -> int:
     pr = evento["pull_request"]
     numero, sha = pr["number"], pr["head"]["sha"]
     repo_cabeca = pr["head"]["repo"]["full_name"] if pr["head"].get("repo") else api.repo
@@ -131,11 +148,14 @@ def executar(api: Api, evento: dict, caminho_resumo: str | None, teto: int = TET
         print(f"Este commit ({sha[:7]}) já foi revisado; nada a fazer.")
         return 0
 
-    achados, nao_revisados = _achar(api, repo_cabeca, sha, api.paginar(f"{base}/files"))
+    achados, nao_revisados, fontes = _achar(api, repo_cabeca, sha, api.paginar(f"{base}/files"))
     if not de_fork:
         comentados = regras_ja_comentadas(api.paginar(f"{base}/comments"))
         achados = [a for a in achados if (a.codigo or "sintaxe", _hash(a.path)) not in comentados]
     rev = montar(achados, teto)
+    if ia and rev.total:
+        anotadas = anotar(rev, fontes, ia)
+        print(f"IA local ({ia.modelo}): {anotadas} nota(s) de {len(rev.inline)} comentário(s).")
 
     pode_comentar = not de_fork and rev.total > 0
     if pode_comentar:
@@ -166,6 +186,17 @@ def executar(api: Api, evento: dict, caminho_resumo: str | None, teto: int = TET
     return 0
 
 
+def _ia(env) -> Ollama | None:
+    """IA local só se pedida (`FAROL_IA=ollama`) e se o servidor responder; senão segue sem."""
+    if env.get("FAROL_IA", "off") != "ollama":
+        return None
+    cliente = Ollama(env.get("FAROL_MODELO") or MODELO_PADRAO)
+    if cliente.disponivel():
+        return cliente
+    print(f"Aviso: o Ollama não respondeu com o modelo {cliente.modelo}; sigo sem IA.")
+    return None
+
+
 def main() -> int:
     env = os.environ
     if env.get("GITHUB_EVENT_NAME") != "pull_request":
@@ -177,7 +208,11 @@ def main() -> int:
     api = Api(env["GITHUB_TOKEN"], env["GITHUB_REPOSITORY"])
     try:
         return executar(
-            api, evento, env.get("GITHUB_STEP_SUMMARY"), int(env.get("FAROL_TETO", "10"))
+            api,
+            evento,
+            env.get("GITHUB_STEP_SUMMARY"),
+            int(env.get("FAROL_TETO", "10")),
+            _ia(env),
         )
     except GitHubError as erro:
         print(f"Erro ao falar com o GitHub: {erro}", file=sys.stderr)
