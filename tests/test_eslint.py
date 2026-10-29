@@ -87,3 +87,19 @@ def test_mudar_a_configuracao_muda_a_pasta_de_cache(tmp_path, monkeypatch):
     antes = modulo._cache()
     (tmp_path / "farol.config.mjs").write_text("v2")
     assert modulo._cache() != antes
+
+
+def test_comentario_eslint_disable_de_plugin_que_o_farol_nao_tem_nao_vira_achado():
+    fonte = "// eslint-disable-next-line unicorn/prefer-spread\nexport const a = [].concat([1]);\n"
+    assert analisar("a.js", fonte) == []
+
+
+def test_underscore_e_parametros_nao_usados_nao_sao_apontados():
+    fonte = (
+        "export function f(a, _b, c) {\n  const [_x, y] = a;\n  return y;\n}\n"
+        "export const g = (req, res, next) => res;\n"
+    )
+    assert analisar("a.js", fonte) == []
+    assert codigos(analisar("a.js", "export function f() {\n  const sobra = 1;\n}\n")) == [
+        "no-unused-vars"
+    ]

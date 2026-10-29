@@ -13,6 +13,7 @@ import subprocess
 from pathlib import Path
 
 from farol.achados import Achado
+from farol.licoes import codigos
 
 FONTE = Path(__file__).resolve().parent.parent / "eslint"
 TIMEOUT_S = 60
@@ -70,12 +71,17 @@ def analisar(path: str, source: str, linhas: set[int] | None = None) -> list[Ach
     if proc.returncode not in (0, 1):  # 0 = limpo, 1 = achados; 2 = falha do ESLint
         raise RuntimeError(f"eslint falhou ({proc.returncode}): {proc.stderr.strip()[:300]}")
     achados: list[Achado] = []
+    com_licao = set(codigos("eslint"))
     for msg in json.loads(proc.stdout)[0]["messages"]:
         if msg.get("fatal") or not msg.get("ruleId"):
             codigo, url = None, None
         else:
             regra = msg["ruleId"]
             codigo = NOMES.get(regra, regra.removeprefix("@typescript-eslint/"))
+            if codigo not in com_licao:
+                # Ex.: `// eslint-disable-next-line unicorn/x` no código revisado: o Farol não
+                # carrega plugins, então o ESLint reclama de "regra não encontrada". Não é achado.
+                continue
             so_do_ts = regra.startswith("@typescript-eslint/") and regra not in NOMES
             url = (
                 f"https://typescript-eslint.io/rules/{codigo}/"

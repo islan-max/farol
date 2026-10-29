@@ -1,3 +1,5 @@
+import pytest
+
 from farol.analise.ruff import analisar
 
 FONTE = """import os
@@ -45,3 +47,18 @@ def test_regras_do_repositorio_revisado_sao_ignoradas(tmp_path, monkeypatch):
     (tmp_path / "ruff.toml").write_text('[lint]\nselect = ["ALL"]\nignore = ["E722"]\n')
     monkeypatch.chdir(tmp_path)
     assert "E722" in codigos(analisar("a.py", FONTE))
+
+
+SENHA_E_EXCECAO = 'password = "abc123"\n\ntry:\n    pass\nexcept Exception:\n    pass\n'
+
+
+@pytest.mark.parametrize(
+    "caminho", ["tests/test_a.py", "test_a.py", "src/a_test.py", "pkg/conftest.py", "a/test/b.py"]
+)
+def test_seguranca_nao_vale_em_arquivo_de_teste(caminho):
+    assert codigos(analisar(caminho, SENHA_E_EXCECAO)) == []
+
+
+def test_seguranca_vale_fora_de_teste_e_o_resto_vale_em_teste():
+    assert codigos(analisar("src/a.py", SENHA_E_EXCECAO)) == ["S105", "S110"]
+    assert codigos(analisar("tests/test_a.py", "import os\n")) == ["F401"]

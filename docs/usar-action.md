@@ -38,6 +38,8 @@ Opções (`with:`):
 - Em um novo commit no mesmo PR, **não repete** uma regra já explicada naquele arquivo.
 - Se não achar nada, **não comenta**; o resultado fica no resumo do job.
 - Arquivos gerados, `lockfile`s, binários e linguagens ainda não suportadas aparecem em "Não revisados".
+- Em arquivos de teste (`tests/`, `test_*.py`, `*_test.py`, `conftest.py`), as regras `S105`, `S110`, `S113` e `S608` não valem: senha de mentira e `except: pass` são normais ali.
+- Em JavaScript/TypeScript, parâmetros de função não usados não são apontados, e nomes começando com `_` valem como "não usado de propósito".
 
 ## Linguagens
 
