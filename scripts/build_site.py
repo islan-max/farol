@@ -188,7 +188,7 @@ Para quem está aprendendo e recebeu “LGTM” ou nada.</p>
 </ol>
 <h2>O que ele não faz</h2>
 <div class="grade">
-<div class="cartao"><h3>Não usa IA</h3><p>A análise vem do <a href="https://docs.astral.sh/ruff/">ruff</a> (Python) e do <a href="https://eslint.org/">ESLint</a> (JavaScript e TypeScript). Nada de resposta inventada: se o Farol aponta, a ferramenta apontou.</p></div>
+<div class="cartao"><h3>Não depende de IA</h3><p>A análise vem do <a href="https://docs.astral.sh/ruff/">ruff</a> (Python) e do <a href="https://eslint.org/">ESLint</a> (JavaScript e TypeScript), e a explicação é escrita à mão. Se o Farol aponta, a ferramenta apontou. Uma nota extra de IA local existe, mas só se você ligar, e vem rotulada.</p></div>
 <div class="cartao"><h3>Não executa seu código</h3><p>Ele só lê o texto do PR. Também recusa rodar em <code>pull_request_target</code>.</p></div>
 <div class="cartao"><h3>Não pede chave nem conta</h3><p>Funciona com o token que o próprio GitHub Actions já dá. Grátis em repositório público.</p></div>
 </div>
@@ -310,6 +310,11 @@ com no máximo 10 comentários (opção <code>teto</code>). Sem apontamentos, el
 uvx --from git+{REPO} farol revisar --base main
 uvx --from git+{REPO} farol explicar E722</code></pre>
 <p>Precisa do <a href="https://docs.astral.sh/uv/">uv</a> e de um repositório git. <code>--json</code> dá a saída para outros programas.</p>
+<h2>Opcionais (desligados por padrão)</h2>
+<h3>IA local</h3>
+<p>Com <code>ia: ollama</code> o runner baixa o <a href="https://ollama.com">Ollama</a> e um modelo pequeno (cerca de 1 GB) e o Farol acrescenta, em cada comentário, uma nota <strong>No seu código</strong>, rotulada como gerada por IA local e que pode errar. A IA não cria nem tira apontamentos, e se algo falhar o comentário sai só com a lição. É grátis em repositório público; em privado consome os minutos do seu plano. Na CLI: <code>farol revisar --ia</code>. As medições estão em <a href="{REPO}/blob/main/docs/medicao-ia.md">medicao-ia.md</a>, inclusive onde o modelo pequeno errou.</p>
+<h3>Painel do Farol</h3>
+<p>Com <code>painel: "on"</code> (e a permissão <code>issues: write</code>) a Action mantém uma issue com, para cada pessoa, o que <strong>se repete</strong> entre PRs, o que <strong>apareceu agora</strong> e o que <strong>já parece dominado</strong>. Guarda só o login, o número do PR e os códigos das regras.</p>
 <h2>Linguagens</h2>
 <p>Python (ruff) e JavaScript/TypeScript (ESLint com typescript-eslint). Arquivos <code>.js</code>, <code>.jsx</code>,
 <code>.mjs</code>, <code>.cjs</code>, <code>.ts</code> e <code>.tsx</code> são revisados na Action e na linha de comando, que precisam

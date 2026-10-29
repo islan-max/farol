@@ -19,7 +19,7 @@ Instância do modelo de contexto do guia. Sem segredos.
 - Comandos: `uv sync`, `uv run ruff check`, `uv run ruff format --check`, `uv run pytest`.
 - Autenticação, papéis, banco, armazenamento de arquivos: nenhum.
 - Hospedagem e publicação: GitHub Pages por workflow; Action distribuída pelo próprio repositório.
-- Serviços externos: GitHub (API de PR com o `GITHUB_TOKEN` do workflow). Nada mais.
+- Serviços externos: GitHub (API de PR e de issues com o `GITHUB_TOKEN` do workflow). Com `ia: ollama`, o runner baixa o Ollama (release do GitHub, sha256 conferido) e o modelo do registro do Ollama; nada do código revisado sai do runner.
 - Variáveis sensíveis: apenas `GITHUB_TOKEN` fornecido pelo GitHub Actions; nenhum valor no repositório.
 
 ## Dados e operação
@@ -28,7 +28,7 @@ Instância do modelo de contexto do guia. Sem segredos.
 - Indexação: páginas públicas indexáveis (sitemap e robots).
 - Custo, tráfego e disponibilidade: gratuito (repositório público, Actions e Pages gratuitos). Em repositório privado a Action consome minutos da cota do usuário.
 - Reversão: reverter o commit na `main` e republicar o Pages.
-- Fora do MVP: IA local e resumo entre PRs (ver `docs/fase-2.md`).
+- Opcionais, desligados por padrão: IA local (Ollama no runner ou na máquina) e Painel do Farol (issue com o histórico entre PRs). O que continua fora: `docs/fase-2.md`.
 - Identidade: base de editor sóbrio com acentos âmbar (`#ffc857`) e verde-água; Inter e JetBrains Mono servidas pelo próprio site; tema escuro padrão e claro pelo sistema.
 
 ## Seleção de módulos
@@ -56,3 +56,6 @@ Instância do modelo de contexto do guia. Sem segredos.
 | Ruff e ESLint do Farol, não os do repositório revisado | Regras e lições precisam ser previsíveis e testáveis; a configuração de fora mudaria o resultado | 29/10/2026 |
 | Campo `categoria` na lição para a prioridade de segurança | O prefixo do código não serve entre ferramentas | 29/10/2026 |
 | Site sem cookies, análise de acesso, CDN ou fontes externas | Privacidade e CSP simples; tudo sai do próprio endereço | 29/10/2026 |
+| IA local e Painel entram, mas opcionais e desligados | Prazo sobrou; a IA pequena erra às vezes (medido) e o painel exige `issues: write` | 29/10/2026 |
+| Segurança não vale em arquivos de teste; parâmetros não usados e `_` aceitos | Falsos positivos achados ao rodar em código real | 29/10/2026 |
+| Release `v0.1.0` e tag móvel `v0`; documentação recomenda `@v0` | Quem usa fixa uma versão estável | 29/10/2026 |
