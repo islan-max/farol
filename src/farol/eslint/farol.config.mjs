@@ -15,6 +15,7 @@ const regras = {
   "no-dupe-keys": "error",
   "no-fallthrough": "error",
   "no-unreachable": "error",
+  "no-const-assign": "error",
 };
 
 export default [

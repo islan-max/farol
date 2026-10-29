@@ -1,0 +1,41 @@
+codigo = "no-const-assign"
+ferramenta = "eslint"
+linguagem = "javascript"
+titulo = "Não dá para reatribuir uma variável `const`"
+nivel = "iniciante"
+o_que_e = """
+Uma variável declarada com `const` recebe um valor novo mais adiante, como em `total = total + 1`.
+"""
+por_que_importa = """
+O `const` promete que o nome **não será reatribuído**. Tentar reatribuir dá o erro \
+`TypeError: Assignment to constant variable` quando essa linha roda, e o programa para. É um tropeço \
+clássico de quem acabou de trocar o `var` pelo `const` em tudo.
+"""
+como_corrigir = """
+Se o valor realmente precisa mudar (um contador, um acumulador), declare com `let`. Se não precisava mudar, \
+crie um nome novo para o valor novo. Lembre que `const` impede reatribuir o nome, mas **não** impede alterar \
+o conteúdo de um objeto ou de uma lista (`lista.push(1)` funciona).
+"""
+antes = '''
+export function contar() {
+  const total = 0;
+  total = total + 1;
+  return total;
+}
+'''
+depois = '''
+export function contar() {
+  let total = 0;
+  total = total + 1;
+  return total;
+}
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra no-const-assign no ESLint"
+url = "https://eslint.org/docs/latest/rules/no-const-assign"
+
+[[docs]]
+titulo = "MDN: const"
+url = "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/const"
