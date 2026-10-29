@@ -52,7 +52,7 @@ Opções (`with:`):
           ia: ollama
 ```
 
-O runner baixa o Ollama (conferido por sha256) e o modelo (cerca de 1 GB) e o Farol acrescenta, em cada comentário, uma nota **No seu código**, rotulada "IA local, pode errar". A IA nunca cria nem tira apontamentos, e se algo falhar o comentário sai só com a lição. Em repositório público é grátis; em **privado** consome minutos do seu plano. Medições, escolha de modelo e limites em [medicao-ia.md](medicao-ia.md).
+O runner baixa o Ollama (conferido por sha256) e o modelo (cerca de 1 GB) e o Farol acrescenta, em cada comentário, uma nota **No seu código**, rotulada "IA local, pode errar". A IA nunca cria nem tira apontamentos, e se algo falhar o comentário sai só com a lição. Em repositório público é grátis; em **privado** consome minutos do seu plano. O modelo padrão (1,5B) é rápido, mas errou ou foi impreciso em 17% das 48 notas medidas; com `modelo: qwen2.5-coder:7b` foram 4% (cerca de 17 s por nota, download de alguns GB, runner de 16 GB). Medições, escolha de modelo e limites em [medicao-ia.md](medicao-ia.md).
 
 ## Painel do Farol: o que se repete entre PRs (opcional)
 

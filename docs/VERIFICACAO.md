@@ -81,8 +81,9 @@ Observação: ferramentas automáticas cobrem só parte dos problemas de acessib
 | IA-01 | B | A IA só acrescenta nota; não cria nem remove apontamentos | Teste compara os apontamentos antes e depois | APROVADO |
 | IA-02 | B | Servidor fora do ar, tempo esgotado, JSON ruim, 500 e orçamento estourado | O comentário sai só com a lição; duas falhas seguidas desligam a IA | APROVADO |
 | IA-03 | R | Roda no runner do GitHub (PR #31) com o Ollama v0.40.13 (sha256 conferido) e o Qwen2.5-Coder 1,5B | 3 notas em cerca de 1 minuto de job | APROVADO |
-| IA-04 | R | Qualidade das notas do 1,5B em uso real | 1 de 3 boa; 1 com imprecisão; 1 enganosa antes de apertar o prompt e, depois, ainda com a primeira frase errada ([medicao-ia.md](medicao-ia.md)). Mitigações: desligada por padrão, nota rotulada "pode errar", lição escrita à mão ao lado | FALHOU (parcial; aceito por ser opcional e rotulado) |
-| IA-05 | R | Runner de repositório privado (2 vCPU, 7 GB), modelo 7B em uso real, PC do mantenedor | Não medidos | NÃO VERIFICADO |
+| IA-04 | R | Qualidade das notas do 1,5B (padrão), 48 notas, classificadas por mim ([medicao-ia-notas.md](medicao-ia-notas.md)) | 39 boas (81%), 7 imprecisas, **1 enganosa** (inventou um `FileNotFoundError`), 1 descartada. Antes disso, em uso real no PR #31: 1 de 3 boa. Mitigações: desligada por padrão, nota rotulada "pode errar", lição escrita à mão ao lado | FALHOU (parcial; aceito por ser opcional e rotulado) |
+| IA-06 | R | Qualidade das notas do 7B (`modelo: qwen2.5-coder:7b`), mesmas 48 | 46 boas (96%), 1 imprecisa, **1 enganosa** (disse que um código com f-string sem campo "está correto"). Cerca de 17 s por nota e 6,4 GB de RAM no total | APROVADO com ressalva (a classificação não é independente; uma nota enganosa em 48) |
+| IA-05 | R | Runner de repositório privado (2 vCPU, 7 GB), PC do mantenedor, avaliação por uma segunda pessoa | Não medidos | NÃO VERIFICADO |
 | PAINEL-01 | B | Painel no GitHub de verdade | A issue [#35](https://github.com/islan-max/farol/issues/35) foi criada pela Action no PR #34 | APROVADO |
 | PAINEL-02 | B | Regras do resumo, limites, corpo corrompido, 403, fork e bot | 13 testes passam; fork e bot são pulados; erro do GitHub vira aviso e a revisão segue | APROVADO |
 | PAINEL-03 | R | Dois PRs revisados ao mesmo tempo | O último a gravar vence (sem trava); documentado | NÃO VERIFICADO (limite aceito) |
@@ -97,7 +98,7 @@ Resumidos na tabela acima (S02, S03, S05, S08, I01-03, D01), cada um com a justi
 | --- | --- | --- | --- |
 | A11Y-04 e A11Y-05 | Médio | Ouvir o "Teste agora" com leitor de tela e testar em aparelho real | Teste manual com NVDA e no celular (depende do mantenedor) |
 | S04-04 | Baixo | PR de fork real | Abrir um PR de outra conta |
-| IA-04 e IA-05 | Baixo (opcional) | Qualidade do 1,5B em uso real; 7B e runner privado nunca rodados em uso real | Medir o 7B e uma amostra maior de notas antes de recomendar a IA |
+| IA-04, IA-05 e IA-06 | Baixo (opcional) | Avaliação das notas por uma segunda pessoa e em código de iniciante de verdade; runner de repositório privado | Amostra independente antes de recomendar a IA em repositório de iniciantes |
 | PAINEL-03 | Baixo | Corrida entre dois PRs revisados juntos | Serializar com `concurrency` no workflow de quem usar |
 | V02-02, V03-02 | Baixo | Search Console e prévia social | Opcional (depende da conta do mantenedor) |
 | Publicação no PyPI | Baixo | Nome e token | Depende da conta do mantenedor |
@@ -106,6 +107,6 @@ Resumidos na tabela acima (S02, S03, S05, S08, I01-03, D01), cada um com a justi
 
 - Estado: **PUBLICADO E VERIFICADO NO ESCOPO**, com as pendências acima (nenhuma bloqueadora) e uma ressalva explícita sobre a IA local.
 - Bloqueadores: nenhum aberto. Todos os controles de criticidade B que se aplicam estão APROVADOS. Os dois abertos de acessibilidade (leitor de tela e aparelho real) significam que a acessibilidade foi comprovada por axe, Lighthouse, teclado e reflow automatizados, e **não** por uso com tecnologia assistiva.
-- Ressalva sobre a IA local (IA-04): as notas do modelo pequeno **às vezes erram**, inclusive em uso real. Por isso a IA é opcional, vem desligada, a nota é rotulada e a lição escrita à mão aparece sempre. Não a recomendo ligada em um repositório de iniciantes sem antes medir o 7B.
+- Ressalva sobre a IA local (IA-04): as notas do modelo pequeno **às vezes erram**, inclusive em uso real. Por isso a IA é opcional, vem desligada, a nota é rotulada e a lição escrita à mão aparece sempre. Com o 7B a amostra de 48 notas teve 96% de notas boas e uma enganosa, o que é melhor, mas a classificação não é independente. Recomendo o 7B a quem ligar a IA (repositório público, runner de 16 GB) e não a recomendo em repositório de iniciantes antes de uma avaliação por uma segunda pessoa.
 - Limitações da verificação: executor único (sem revisão externa); os demos da Action foram feitos em PRs do próprio repositório; poucos projetos na medição em código real; o Pages não permite cabeçalhos HTTP próprios.
 - Plano de recuperação: **ensaiado**. Reverter o commit na `main` republica o site (o ambiente `github-pages` só aceita deploy da `main`); a Action é usada pela tag `v0` ou `v0.1.0`, então quem fixar uma versão não é afetado por mudanças na `main`.

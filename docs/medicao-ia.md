@@ -32,9 +32,32 @@ A Action rodou com `ia: ollama` sobre três apontamentos (`B006`, `F841`, `E722`
 
 Ou seja: o 1,5B acertou bem as cinco notas da medição controlada, mas em uso real errou parte. O rótulo "pode errar" e a lição escrita à mão ao lado de cada nota existem por isso. Quem quiser notas melhores deve usar o 7B (`modelo: qwen2.5-coder:7b`), a um custo de 15 a 37 s por nota; **não medi o 7B nessa rodada real**.
 
+## Amostra maior: 48 notas, 1,5B contra 7B (PR descartável [#44](https://github.com/islan-max/farol/pull/44))
+
+Pedido do mantenedor depois da rodada pequena. O código real do Farol (`farol.ia`) gerou uma nota para cada um dos **48 apontamentos** formados pelo `antes` das 27 lições e pelos achados dos casos de avaliação com problema, com os dois modelos, no mesmo runner (4 vCPU, 16 GB). A saída completa, com a classificação de cada nota, está em [medicao-ia-notas.md](medicao-ia-notas.md).
+
+| | 1,5B | 7B |
+| --- | --- | --- |
+| Notas boas | **39 de 48** (81%) | **46 de 48** (96%) |
+| Imprecisas (acertam o essencial, afirmam algo falso ou confuso) | 7 | 1 |
+| Enganosas (diagnóstico errado ou contradiz a lição) | 1 | 1 |
+| Descartadas pela limpeza | 1 | 0 |
+| Tempo por nota (média, máximo) | 3,9 s, 7,2 s | 17,4 s, 29,2 s |
+| Memória usada no runner com o modelo carregado (total, incluindo o sistema) | 2,4 GB | 6,4 GB |
+
+O que cada um errou:
+
+- **1,5B, enganosa:** num `try` que só tocava em `item.valor`, afirmou que o erro ignorado era `FileNotFoundError` ("quando o arquivo não é encontrado"). Não havia arquivo nenhum; inventou um fato.
+- **1,5B, imprecisas:** no `var`, disse que `total` "continua existindo fora do `for`" (era o `i`); no `except:`, que o código "não está tratando `KeyboardInterrupt`" (é o contrário: captura); no `raise` sem `from`, confundiu qual erro era capturado e qual era levantado (duas vezes); numa variável não usada, sugeriu "calcular o total sem o frete"; duas vezes inventou detalhes do código em `l` e na f-string.
+- **7B, enganosa:** disse que um código com `f"..."` sem campo "está correto" e "não há necessidade de nenhuma mudança", contradizendo o apontamento.
+- **7B, imprecisa:** num `not item in vistos`, afirmou "está correto, mas a ferramenta apontou uma melhor prática" (o resultado é mesmo igual, mas a frase confunde quem aprende).
+- O 7B foi melhor onde importa para ensinar: acertou a correção de `F841` (devolver `total` em vez de `sum(precos)`) e escolheu o erro certo no `except` (`ValueError` para uma conversão).
+
+**Limites desta medição, para não superestimar o resultado:** a classificação é minha, feita por quem também escreveu as lições, e não por uma segunda pessoa; os casos são os mesmos em que as lições se apoiam, então tendem a ser mais fáceis que código de iniciante de verdade; 48 notas por modelo é pouco; uma única execução (a geração tem temperatura 0,1, mas não é determinística); e **o runner de repositório privado (2 vCPU, 7 GB) não foi medido**: o 7B usou 6,4 GB no total, então provavelmente não cabe ali.
+
 ## Decisão
 
-- Modelo padrão: `qwen2.5-coder:1.5b` (rápido, 0,6 GB, cabe até no runner de repositório privado). O 3B não foi melhor. O 7B escreve melhor, mas custa 4,7 GB de RAM e de 15 a 37 s por nota (até 6 minutos com 10 comentários): serve para quem quiser, via `modelo:`.
+- Modelo padrão: `qwen2.5-coder:1.5b` (rápido, 0,6 GB a mais de RAM, cabe até no runner de repositório privado). O 3B não foi melhor. **Quem quer notas mais confiáveis deve usar o 7B** (`modelo: qwen2.5-coder:7b`): na amostra de 48, 96% de notas boas contra 81%, a um custo de cerca de 17 s por nota e de um download de alguns GB (não medi o tamanho no disco do runner). O orçamento de 4 minutos por execução cobre cerca de 14 notas com o 7B; o que passar disso sai só com a lição, sem a nota. Só em repositório público e com runner de 16 GB: em runner de 7 GB o 7B provavelmente não cabe (não medido).
 - Desligada por padrão. Ligar: `with: ia: ollama` na Action ou `farol revisar --ia` na CLI (a CLI usa o Ollama que você já tem; não instala nada).
 - **Custo.** Em repositório público o runner é grátis. Em repositório **privado**, baixar o Ollama e o modelo e gerar as notas consome minutos do plano (da ordem de 1 minuto a mais por execução com o 1,5B) num runner menor (2 vCPU e 7 GB, não medido).
 - A nota nunca bloqueia: servidor fora do ar, tempo esgotado ou resposta estranha, e o comentário sai só com a lição. Duas falhas seguidas desligam a IA naquela execução; o orçamento total é de 4 minutos.
@@ -42,6 +65,6 @@ Ou seja: o 1,5B acertou bem as cinco notas da medição controlada, mas em uso r
 
 ## O que não foi medido
 
-- Runner de repositório privado (2 vCPU, 7 GB).
-- Qualidade em código de iniciante de verdade e em outras regras além das cinco medidas; só dá para confiar nas notas por amostragem.
+- Runner de repositório privado (2 vCPU, 7 GB), para os dois modelos.
+- Qualidade em código de iniciante de verdade (os 48 casos são os da própria suíte) e avaliação por uma segunda pessoa; só dá para confiar nas notas por amostragem.
 - PC do mantenedor (9,8 GB de RAM, sem GPU): não instalei o Ollama lá, pois o runner responde à pergunta principal.
