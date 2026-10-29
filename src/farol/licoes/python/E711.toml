@@ -1,0 +1,38 @@
+codigo = "E711"
+ferramenta = "ruff"
+titulo = "Compare com `None` usando `is`"
+nivel = "iniciante"
+o_que_e = """
+`x == None` pergunta "x é igual a None?". O que você quer saber é "x **é** o `None`?", e isso se escreve \
+`x is None`.
+"""
+por_que_importa = """
+O `None` é um objeto único no programa, então a pergunta certa é sobre identidade (`is`). Já o `==` pode \
+ser redefinido por uma classe e dar uma resposta inesperada; bibliotecas como NumPy e pandas usam `==` \
+para comparar elemento a elemento, e aí um `if x == None` deixa de funcionar. Também é a forma que todo \
+mundo espera ler.
+"""
+como_corrigir = """
+Troque `== None` por `is None` e `!= None` por `is not None`.
+"""
+antes = '''
+def tem_nome(pessoa):
+    if pessoa.nome == None:
+        return False
+    return True
+'''
+depois = '''
+def tem_nome(pessoa):
+    if pessoa.nome is None:
+        return False
+    return True
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra E711 no ruff"
+url = "https://docs.astral.sh/ruff/rules/none-comparison/"
+
+[[docs]]
+titulo = "PEP 8: recomendações de programação"
+url = "https://peps.python.org/pep-0008/#programming-recommendations"
