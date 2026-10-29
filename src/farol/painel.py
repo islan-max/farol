@@ -116,26 +116,56 @@ def renderizar(dados: dict) -> str:
     return "\n".join(partes)
 
 
+TENTATIVAS = 3
+
+
+def _achar_painel(api, base: str) -> dict | None:
+    """A issue do painel; havendo duas (corrida), vale a de menor número: todos escolhem igual."""
+    todas_ = [
+        i
+        for i in api.paginar(f"{base}/issues?state=open&labels={ROTULO}")
+        if "pull_request" not in i and _DADOS.search(i.get("body") or "")
+    ]
+    return min(todas_, key=lambda i: i["number"]) if todas_ else None
+
+
+def _sobreviveu(dados: dict, login: str, pr: int, regras: set[str]) -> bool:
+    registro = dados["pessoas"].get(login, {}).get(str(pr))
+    return registro is not None and regras <= set(registro)
+
+
 def atualizar(api, pr: int, login: str, regras: set[str]) -> Resumo | None:
-    """Regrava o painel com o PR atual e devolve o resumo da pessoa. Nunca derruba a revisão."""
+    """Regrava o painel com o PR atual e devolve o resumo da pessoa. Nunca derruba a revisão.
+
+    O GitHub não tem gravação condicional para o corpo de uma issue, então dois PRs revisados juntos
+    podem se sobrescrever. Por isso, depois de gravar, relê e confere se o registro deste PR
+    sobreviveu; se não, soma de novo e grava outra vez (até TENTATIVAS).
+    shortcut: continua não sendo atômico (uma gravação logo após a conferência ainda pode perder um
+    registro), upgrade: mover o histórico para um armazenamento com compare-and-swap.
+    """
     try:
         base = f"/repos/{api.repo}"
-        existentes = [
-            i
-            for i in api.paginar(f"{base}/issues?state=open&labels={ROTULO}")
-            if "pull_request" not in i and _DADOS.search(i.get("body") or "")
-        ]
-        issue = existentes[0] if existentes else None
-        dados = carregar(issue["body"] if issue else None)
-        registrar(dados, login, pr, regras)
-        corpo = renderizar(dados)
-        while len(corpo) > MAX_CHARS and len(dados["pessoas"]) > 1:
-            del dados["pessoas"][next(iter(dados["pessoas"]))]  # descarta a pessoa mais antiga
+        for tentativa in range(1, TENTATIVAS + 1):
+            issue = _achar_painel(api, base)
+            dados = carregar(issue["body"] if issue else None)
+            registrar(dados, login, pr, regras)
             corpo = renderizar(dados)
-        if issue:
-            api.alterar(f"{base}/issues/{issue['number']}", {"body": corpo})
-        else:
-            api.enviar(f"{base}/issues", {"title": TITULO, "body": corpo, "labels": [ROTULO]})
+            while len(corpo) > MAX_CHARS and len(dados["pessoas"]) > 1:
+                del dados["pessoas"][next(iter(dados["pessoas"]))]  # descarta a pessoa mais antiga
+                corpo = renderizar(dados)
+            if issue:
+                api.alterar(f"{base}/issues/{issue['number']}", {"body": corpo})
+            else:
+                api.enviar(f"{base}/issues", {"title": TITULO, "body": corpo, "labels": [ROTULO]})
+            atual = _achar_painel(api, base)
+            relido = carregar(atual["body"] if atual else None)
+            if _sobreviveu(relido, login, pr, regras):
+                return resumir(relido["pessoas"].get(login, {}))
+            print(
+                f"Aviso: outro PR sobrescreveu o painel; tentando de novo "
+                f"({tentativa}/{TENTATIVAS})."
+            )
+        print("Aviso: o painel pode ficar sem o registro deste PR (gravações simultâneas).")
         return resumir(dados["pessoas"].get(login, {}))
     except GitHubError as erro:
         print(f"Aviso: não consegui atualizar o painel ({erro}).")

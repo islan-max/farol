@@ -70,7 +70,7 @@ permissions:
 
 A Action mantém **uma issue** "Painel do Farol" (rótulo `farol`) com, para cada pessoa, o que **se repete** (regras que apareceram em 2 ou mais PRs), o que **apareceu agora** e o que **já parece dominado** (apareceu antes e não está nos 2 PRs mais recentes, com 3 ou mais PRs revisados). O resumo da pessoa também entra no corpo da review ("Seu progresso neste repositório"), quando já há histórico.
 
-- O histórico fica em um comentário HTML no corpo da issue e guarda só o **login** (já público no PR), o **número do PR** e os **códigos das regras**. Até 30 PRs por pessoa e 50 pessoas. É regravado a cada PR revisado; dois PRs revisados no mesmo segundo podem sobrescrever um ao outro (o último vence).
+- O histórico fica em um comentário HTML no corpo da issue e guarda só o **login** (já público no PR), o **número do PR** e os **códigos das regras**. Até 30 PRs por pessoa e 50 pessoas. É regravado a cada PR revisado. Como o GitHub não tem gravação condicional para o corpo de uma issue, a Action **relê o painel depois de gravar e, se o registro do PR sumiu (outro PR gravou por cima), soma de novo e grava outra vez, até 3 vezes**. Se duas issues do painel nascerem juntas, todos usam a de menor número. Ainda não é atômico: uma gravação logo depois da conferência pode perder um registro (um PR a menos no histórico, sem outro efeito).
 - Não roda para PR de fork nem de bot. Sem a permissão `issues: write`, o painel é pulado com um aviso e a revisão segue normal.
 - Para zerar, apague a issue ou edite o corpo.
 

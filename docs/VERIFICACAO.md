@@ -86,7 +86,7 @@ Observação: ferramentas automáticas cobrem só parte dos problemas de acessib
 | IA-05 | R | Runner de repositório privado (2 vCPU, 7 GB), PC do mantenedor, avaliação por uma segunda pessoa | Não medidos | NÃO VERIFICADO |
 | PAINEL-01 | B | Painel no GitHub de verdade | A issue [#35](https://github.com/islan-max/farol/issues/35) foi criada pela Action no PR #34 | APROVADO |
 | PAINEL-02 | B | Regras do resumo, limites, corpo corrompido, 403, fork e bot | 13 testes passam; fork e bot são pulados; erro do GitHub vira aviso e a revisão segue | APROVADO |
-| PAINEL-03 | R | Dois PRs revisados ao mesmo tempo | O último a gravar vence (sem trava); documentado | NÃO VERIFICADO (limite aceito) |
+| PAINEL-03 | R | Dois PRs revisados ao mesmo tempo | O painel relê depois de gravar, soma de novo se o registro sumiu (até 3 tentativas) e, com duas issues, todos usam a de menor número. 3 testes com API falsa (corrida, desistência com aviso, duas issues) passam. **Não é atômico** (janela residual) e a corrida nunca foi provocada no GitHub de verdade | APROVADO (API falsa) / NÃO VERIFICADO (corrida real) |
 
 ## Itens não aplicáveis
 
@@ -99,7 +99,7 @@ Resumidos na tabela acima (S02, S03, S05, S08, I01-03, D01), cada um com a justi
 | A11Y-04 e A11Y-05 | Médio | Ouvir o "Teste agora" com leitor de tela e testar em aparelho real | Teste manual com NVDA e no celular (depende do mantenedor) |
 | S04-04 | Baixo | PR de fork real | Abrir um PR de outra conta |
 | IA-04, IA-05 e IA-06 | Baixo (opcional) | Avaliação das notas por uma segunda pessoa e em código de iniciante de verdade; runner de repositório privado | Amostra independente antes de recomendar a IA em repositório de iniciantes |
-| PAINEL-03 | Baixo | Corrida entre dois PRs revisados juntos | Serializar com `concurrency` no workflow de quem usar |
+| PAINEL-03 | Baixo | Corrida real no GitHub; janela residual de gravação | Provocar dois PRs juntos ou mover o histórico para um armazenamento com compare-and-swap |
 | V02-02, V03-02 | Baixo | Search Console e prévia social | Opcional (depende da conta do mantenedor) |
 | Publicação no PyPI | Baixo | Nome e token | Depende da conta do mantenedor |
 

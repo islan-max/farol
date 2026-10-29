@@ -88,10 +88,15 @@ class ApiDeIssues:
 
     def enviar(self, caminho, corpo):
         self.criadas.append((caminho, corpo))
+        self.issue = {
+            "number": 7,
+            "body": corpo["body"],
+        }  # o painel recém-criado já pode ser relido
         return {}
 
     def alterar(self, caminho, corpo):
         self.alteradas.append((caminho, corpo))
+        self.issue = {**self.issue, "body": corpo["body"]}
         return {}
 
 
@@ -140,9 +145,9 @@ class ApiDaAction(ApiDeIssues):
         return FONTE
 
     def enviar(self, caminho, corpo):
-        (
-            self.criadas if caminho.endswith("/issues") else self.__dict__.setdefault("reviews", [])
-        ).append((caminho, corpo))
+        if caminho.endswith("/issues"):
+            return super().enviar(caminho, corpo)
+        self.__dict__.setdefault("reviews", []).append((caminho, corpo))
         return {}
 
 
@@ -176,3 +181,69 @@ def test_painel_ignora_bot_e_fork():
     fork = ApiDaAction()
     executar(fork, evento(repo="outra/repo"), None, painel=True)
     assert fork.criadas == [] and fork.alteradas == []
+
+
+# --- gravações simultâneas ---------------------------------------------------------------------
+
+
+def corpo_com(**pessoas):
+    return painel.renderizar({"v": 1, "pessoas": pessoas})
+
+
+class ApiComCorrida(ApiDeIssues):
+    """Depois de cada gravação nossa, 'outro PR' grava por cima um corpo mais antigo."""
+
+    def __init__(self, issue, concorrente, vezes):
+        super().__init__(issue)
+        self.concorrente, self.vezes = concorrente, vezes
+
+    def alterar(self, caminho, corpo):
+        super().alterar(caminho, corpo)
+        if self.vezes > 0:
+            self.vezes -= 1
+            self.issue = {**self.issue, "body": self.concorrente}
+        return {}
+
+
+def test_gravacao_sobrescrita_por_outro_pr_e_refeita_e_mantem_os_dois():
+    inicial = corpo_com(bia={"1": ["E722"]})
+    concorrente = corpo_com(bia={"1": ["E722"]}, carol={"3": ["B006"]})  # leu antes da nossa
+    api = ApiComCorrida({"number": 5, "body": inicial}, concorrente, vezes=1)
+    resumo = painel.atualizar(api, 2, "ana", {"F401"})
+    assert len(api.alteradas) == 2  # a primeira se perdeu; a segunda soma tudo
+    final = painel.carregar(api.issue["body"])["pessoas"]
+    assert final == {
+        "bia": {"1": ["E722"]},
+        "carol": {"3": ["B006"]},
+        "ana": {"2": ["F401"]},
+    }
+    assert resumo.n_prs == 1
+
+
+def test_se_toda_gravacao_for_sobrescrita_desiste_com_aviso_e_nao_levanta_erro(capsys):
+    inicial = corpo_com(bia={"1": ["E722"]})
+    api = ApiComCorrida({"number": 5, "body": inicial}, inicial, vezes=99)
+    resumo = painel.atualizar(api, 2, "ana", {"F401"})
+    assert len(api.alteradas) == painel.TENTATIVAS
+    assert resumo is not None
+    assert "pode ficar sem o registro deste PR" in capsys.readouterr().out
+
+
+def test_dois_paineis_por_corrida_todo_mundo_usa_o_de_menor_numero():
+    class ApiDuas(ApiDeIssues):
+        def __init__(self, corpos):
+            super().__init__()
+            self.corpos = corpos
+
+        def paginar(self, caminho):
+            return [{"number": n, "body": b} for n, b in self.corpos.items()]
+
+        def alterar(self, caminho, corpo):
+            self.alteradas.append((caminho, corpo))
+            self.corpos[int(caminho.rsplit("/", 1)[1])] = corpo["body"]
+            return {}
+
+    api = ApiDuas({9: corpo_com(bia={"1": ["E722"]}), 5: corpo_com(carol={"3": ["B006"]})})
+    painel.atualizar(api, 2, "ana", {"F401"})
+    assert [c for c, _ in api.alteradas] == ["/repos/dono/repo/issues/5"]
+    assert set(painel.carregar(api.corpos[5])["pessoas"]) == {"carol", "ana"}
