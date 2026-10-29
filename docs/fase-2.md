@@ -14,7 +14,7 @@ Implementado como a issue "Painel do Farol" (opcional, `painel: on`). Veja [usar
 
 - Mais lições (hoje 17 de Python e 10 de JavaScript/TypeScript) e mais exemplos reais (hoje 7 lições têm exemplo). A ferramenta `scripts/buscar_exemplos.py` existe para isso; a lição de `S113` ficou sem exemplo porque nenhum trecho achado era bom.
 - Publicar no PyPI (`uvx farol`): precisa do nome reservado e de um token, que são do mantenedor.
-- Medir o modelo de 7B e uma amostra maior de notas da IA em uso real, e o runner de repositório privado.
+- Avaliar as notas da IA com uma segunda pessoa e em código de iniciante de verdade (o 7B já foi medido em 48 notas), e medir o runner de repositório privado.
 - "Teste agora" para JavaScript/TypeScript no navegador: não verifiquei se existe um build de ESLint para o navegador que valha o peso.
 - Serializar a gravação do Painel quando dois PRs são revisados ao mesmo tempo.
 - Recusar `--teto` negativo e outros ajustes finos da CLI.
