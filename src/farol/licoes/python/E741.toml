@@ -1,0 +1,39 @@
+codigo = "E741"
+ferramenta = "ruff"
+titulo = "Nome de variável fácil de confundir (`l`, `O`, `I`)"
+nivel = "iniciante"
+o_que_e = """
+As letras `l` (L minúsculo), `O` e `I` se parecem com `1` e `0` em muitas fontes, e o ruff avisa quando \
+uma variável usa um desses nomes.
+"""
+por_que_importa = """
+Uma linha como `l = 1` ou `if O == 0` fica difícil de ler, e erro de leitura vira bug. Além disso, um nome \
+de uma letra não diz o que a variável guarda, e você daqui a um mês é a pessoa que vai ler isso.
+"""
+como_corrigir = """
+Use um nome que diga o conteúdo: `contagem`, `largura`, `item`. Em contas curtas e laços, `i`, `j` e `x` \
+são aceitos por convenção; só evite `l`, `O` e `I`.
+"""
+antes = '''
+def contar(linhas):
+    l = 0
+    for _ in linhas:
+        l += 1
+    return l
+'''
+depois = '''
+def contar(linhas):
+    contagem = 0
+    for _ in linhas:
+        contagem += 1
+    return contagem
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra E741 no ruff"
+url = "https://docs.astral.sh/ruff/rules/ambiguous-variable-name/"
+
+[[docs]]
+titulo = "PEP 8: nomes a evitar"
+url = "https://peps.python.org/pep-0008/#names-to-avoid"

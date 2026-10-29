@@ -1,0 +1,36 @@
+codigo = "F821"
+ferramenta = "ruff"
+titulo = "Nome que não existe nesse ponto do código"
+nivel = "iniciante"
+o_que_e = """
+Você usou um nome (variável, função ou módulo) que não foi definido nem importado antes.
+"""
+por_que_importa = """
+Ao rodar, essa linha dá `NameError` e o programa para. Costuma ser erro de digitação, um `import` esquecido \
+ou uma variável criada dentro de outra função: cada função tem o seu próprio escopo, e uma não enxerga as \
+variáveis da outra.
+"""
+como_corrigir = """
+Confira a grafia. Se é um módulo, importe (`import math`). Se o valor vem de outra função, passe-o como \
+argumento ou devolva-o com `return`, em vez de esperar que ele apareça por mágica.
+"""
+antes = '''
+def area_circulo(raio):
+    return math.pi * raio**2
+'''
+depois = '''
+import math
+
+
+def area_circulo(raio):
+    return math.pi * raio**2
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra F821 no ruff"
+url = "https://docs.astral.sh/ruff/rules/undefined-name/"
+
+[[docs]]
+titulo = "Tutorial do Python: escopos e espaços de nomes"
+url = "https://docs.python.org/pt-br/3/tutorial/classes.html#python-scopes-and-namespaces"

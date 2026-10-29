@@ -1,0 +1,41 @@
+codigo = "S105"
+ferramenta = "ruff"
+titulo = "Senha escrita direto no código"
+nivel = "iniciante"
+o_que_e = """
+Uma variável com nome de senha, token ou chave recebe um texto fixo no código, como \
+`password = "abc123"`. (O ruff reconhece nomes em inglês como `password`, `token` e `secret`; \
+um nome como `senha` ele não percebe, então a atenção aqui também é sua.)
+"""
+por_que_importa = """
+Tudo que está no código vai para o Git. Em um repositório público qualquer pessoa lê, inclusive o \
+histórico: apagar a linha depois não basta, o valor continua nos commits antigos. Robôs varrem o GitHub \
+procurando exatamente isso, e uma chave publicada pode ser usada em minutos.
+"""
+como_corrigir = """
+Leia o valor de uma variável de ambiente (`os.environ["DB_PASSWORD"]`) e guarde o valor real fora do \
+repositório, por exemplo num arquivo `.env` listado no `.gitignore`. Se um segredo real já foi \
+publicado, considere-o vazado: troque-o no serviço de origem.
+"""
+antes = '''
+def conectar():
+    password = "abc123"
+    return abrir_banco(usuario="admin", senha=password)
+'''
+depois = '''
+import os
+
+
+def conectar():
+    password = os.environ["DB_PASSWORD"]
+    return abrir_banco(usuario="admin", senha=password)
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra S105 no ruff"
+url = "https://docs.astral.sh/ruff/rules/hardcoded-password-string/"
+
+[[docs]]
+titulo = "GitHub: removendo dados sensíveis de um repositório"
+url = "https://docs.github.com/pt/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository"
