@@ -161,7 +161,7 @@ As lições são o produto. Em cada uma, o exemplo **"antes" dispara a regra na 
 | [`F841`](https://islan-max.github.io/farol/licoes/F841.html) | Variável criada e nunca usada | iniciante |  |
 | [`S105`](https://islan-max.github.io/farol/licoes/S105.html) | Senha escrita direto no código | iniciante | ✔ |
 | [`S110`](https://islan-max.github.io/farol/licoes/S110.html) | `try`/`except` que engole o erro em silêncio | intermediário | ✔ |
-| [`S113`](https://islan-max.github.io/farol/licoes/S113.html) | Chamada de rede sem `timeout` pode travar para sempre | intermediário |  |
+| [`S113`](https://islan-max.github.io/farol/licoes/S113.html) | Chamada de rede sem `timeout` pode travar para sempre | intermediário | ✔ |
 | [`S608`](https://islan-max.github.io/farol/licoes/S608.html) | SQL montado juntando texto abre brecha para injeção de SQL | intermediário | ✔ |
 
 </details>

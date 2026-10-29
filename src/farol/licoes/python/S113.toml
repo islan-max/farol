@@ -29,7 +29,7 @@ import requests
 def baixar(url):
     return requests.get(url, timeout=10).text
 '''
-exemplos = []
+exemplos = ["S113-1"]
 
 [[docs]]
 titulo = "Regra S113 no ruff"

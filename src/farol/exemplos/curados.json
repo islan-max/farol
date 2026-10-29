@@ -61,5 +61,14 @@
     "permalink": "https://github.com/eslint/eslint/blob/6e3f9888cca518fbb9ba399e88b3033577d9f4ad/lib/rules/function-paren-newline.js#L267-L272",
     "trecho": "\t\t\t\t\t\treturn null;\n\t\t\t\t\t}\n\n\t\t\t\t// falls through\n\n\t\t\t\tcase \"CallExpression\":",
     "porque": "Aqui a queda para o próximo case é de propósito, e o comentário // falls through avisa isso a quem lê; o ESLint aceita esse comentário."
+  },
+  {
+    "id": "S113-1",
+    "regra": "S113",
+    "repo": "psf/requests",
+    "licenca": "Apache-2.0",
+    "permalink": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/docs/user/advanced.rst#L1106-L1113",
+    "trecho": "If you specify a single value for the timeout, like this::\n\n    r = requests.get('https://github.com', timeout=5)\n\nThe timeout value will be applied to both the ``connect`` and the ``read``\ntimeouts. Specify a tuple if you would like to set the values separately::\n\n    r = requests.get('https://github.com', timeout=(3.05, 27))",
+    "porque": "A documentação oficial do requests mostra timeout=5 para o limite único e timeout=(3.05, 27) para separar conexão e leitura, exatamente o que a lição ensina."
   }
 ]
