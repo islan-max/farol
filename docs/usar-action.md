@@ -19,7 +19,7 @@ jobs:
   farol:
     runs-on: ubuntu-latest
     steps:
-      - uses: islan-max/farol@v0
+      - uses: islan-max/farol@main
 ```
 
 Não precisa de `actions/checkout`: o Farol lê os arquivos do PR pela API do GitHub.
@@ -47,7 +47,7 @@ Opções (`with:`):
 ## IA local (opcional)
 
 ```yaml
-      - uses: islan-max/farol@v0
+      - uses: islan-max/farol@main
         with:
           ia: ollama
 ```
@@ -63,7 +63,7 @@ permissions:
   issues: write          # só para o painel
 
     steps:
-      - uses: islan-max/farol@v0
+      - uses: islan-max/farol@main
         with:
           painel: "on"
 ```
