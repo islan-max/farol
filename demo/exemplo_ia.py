@@ -13,3 +13,4 @@ def carregar(caminho):
         return open(caminho).read()
     except:
         return ""
+# rerun 1793281306
