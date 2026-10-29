@@ -14,7 +14,7 @@
   <a href="LICENSE"><img alt="Licença MIT" src="https://img.shields.io/badge/licen%C3%A7a-MIT-3fb950?style=flat-square"></a>
 </p>
 <p>
-  <img alt="28 lições" src="https://img.shields.io/badge/li%C3%A7%C3%B5es-28-e3b341?style=flat-square">
+  <img alt="29 lições" src="https://img.shields.io/badge/li%C3%A7%C3%B5es-29-e3b341?style=flat-square">
   <img alt="IA opcional" src="https://img.shields.io/badge/IA-opcional-8957e5?style=flat-square">
   <img alt="WCAG 2.2 AA" src="https://img.shields.io/badge/WCAG_2.2-AA-1a7f37?style=flat-square">
   <img alt="Python 3.12" src="https://img.shields.io/badge/python-3.12-3572a5?style=flat-square&logo=python&logoColor=white">
@@ -167,11 +167,12 @@ As lições são o produto. Em cada uma, o exemplo **"antes" dispara a regra na 
 </details>
 
 <details>
-<summary><b>JavaScript e TypeScript</b> · 10 lições (ESLint)</summary>
+<summary><b>JavaScript e TypeScript</b> · 11 lições (ESLint)</summary>
 
 | Regra | Lição | Nível | Exemplo real |
 | --- | --- | --- | :---: |
 | [`eqeqeq`](https://islan-max.github.io/farol/licoes/eqeqeq.html) | Use `===` em vez de `==` | iniciante |  |
+| [`no-const-assign`](https://islan-max.github.io/farol/licoes/no-const-assign.html) | Não dá para reatribuir uma variável `const` | iniciante |  |
 | [`no-dupe-keys`](https://islan-max.github.io/farol/licoes/no-dupe-keys.html) | Chave repetida em um objeto | iniciante |  |
 | [`no-empty`](https://islan-max.github.io/farol/licoes/no-empty.html) | Bloco vazio, em especial `catch` que engole o erro | intermediário |  |
 | [`no-eval`](https://islan-max.github.io/farol/licoes/no-eval.html) | Não use `eval`: ele executa texto como código | intermediário |  |
