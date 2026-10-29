@@ -156,3 +156,12 @@ def test_anotacoes_escapam_quebra_de_linha_e_porcentagem():
 
     saida = anotacoes(montar([Achado("a.py", 1, "ruff", None, "100%\nruim")]))
     assert saida == ["::notice file=a.py,line=1,title=Erro de sintaxe::100%25%0Aruim"]
+
+
+@pytest.mark.parametrize("evento", ["pull_request_target", "push", ""])
+def test_main_so_roda_em_pull_request(monkeypatch, capsys, evento):
+    from farol.action import main
+
+    monkeypatch.setenv("GITHUB_EVENT_NAME", evento)
+    assert main() == 2
+    assert "pull_request" in capsys.readouterr().err
