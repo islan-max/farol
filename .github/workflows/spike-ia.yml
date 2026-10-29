@@ -24,10 +24,10 @@ jobs:
         run: |
           T0=$(date +%s)
           base=https://github.com/ollama/ollama/releases/download/$OLLAMA_VERSAO
-          curl -fsSL -o ollama.tar.zst "$base/ollama-linux-amd64.tar.zst"
+          curl -fsSL -o ollama-linux-amd64.tar.zst "$base/ollama-linux-amd64.tar.zst"
           curl -fsSL -o sha256sum.txt "$base/sha256sum.txt"
           grep ' ./ollama-linux-amd64.tar.zst$' sha256sum.txt | sed 's# ./# #' | sha256sum -c -
-          mkdir -p "$HOME/ollama" && tar --zstd -xf ollama.tar.zst -C "$HOME/ollama"
+          mkdir -p "$HOME/ollama" && tar --zstd -xf ollama-linux-amd64.tar.zst -C "$HOME/ollama"
           ls "$HOME/ollama" "$HOME/ollama/bin" | head
           du -sh "$HOME/ollama"
           echo "TEMPO baixar+conferir+extrair: $(( $(date +%s) - T0 ))s"
