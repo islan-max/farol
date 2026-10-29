@@ -1,0 +1,37 @@
+codigo = "no-explicit-any"
+ferramenta = "eslint"
+linguagem = "typescript"
+extensao = "ts"
+titulo = "Evite `any` no TypeScript"
+nivel = "intermediario"
+o_que_e = """
+Um valor, parâmetro ou variável com o tipo `any`, que desliga a checagem de tipos para ele.
+"""
+por_que_importa = """
+Com `any`, o TypeScript aceita qualquer uso, inclusive `dobro("texto")`, e o erro só aparece com o programa \
+rodando, que é exatamente o que o TypeScript existe para evitar. Um `any` também se espalha: tudo que \
+nasce de um valor `any` vira `any`.
+"""
+como_corrigir = """
+Diga o tipo real (`number`, `string`, uma interface). Se o tipo é mesmo desconhecido, use `unknown`: ele \
+obriga você a verificar o tipo antes de usar o valor.
+"""
+antes = '''
+export function dobro(valor: any) {
+  return valor * 2;
+}
+'''
+depois = '''
+export function dobro(valor: number) {
+  return valor * 2;
+}
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra no-explicit-any no typescript-eslint"
+url = "https://typescript-eslint.io/rules/no-explicit-any/"
+
+[[docs]]
+titulo = "Manual do TypeScript: o tipo any"
+url = "https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#any"

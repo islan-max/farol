@@ -1,0 +1,32 @@
+codigo = "no-unreachable"
+ferramenta = "eslint"
+linguagem = "javascript"
+titulo = "Código depois de `return` nunca roda"
+nivel = "iniciante"
+o_que_e = """
+Há uma linha depois de um `return`, `throw`, `break` ou `continue` no mesmo bloco, e ela jamais será executada.
+"""
+por_que_importa = """
+Costuma ser um `console.log` que você achou que rodava, ou uma parte da lógica que ficou no lugar errado, e o \
+programa se comporta diferente do que você imagina sem dar nenhum aviso.
+"""
+como_corrigir = """
+Mova a linha para **antes** do `return`, ou apague se não serve mais.
+"""
+antes = '''
+export function dobro(n) {
+  return n * 2;
+  console.log("calculado");
+}
+'''
+depois = '''
+export function dobro(n) {
+  console.log("calculado");
+  return n * 2;
+}
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra no-unreachable no ESLint"
+url = "https://eslint.org/docs/latest/rules/no-unreachable"

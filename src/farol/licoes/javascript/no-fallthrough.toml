@@ -1,0 +1,57 @@
+codigo = "no-fallthrough"
+ferramenta = "eslint"
+linguagem = "javascript"
+titulo = "`case` sem `break` cai no caso seguinte"
+nivel = "intermediario"
+o_que_e = """
+Em um `switch`, o código de um `case` termina sem `break`, `return` ou `throw`, e a execução continua no \
+`case` de baixo.
+"""
+por_que_importa = """
+No exemplo abaixo, para a nota "A" o texto vira "ótimo" e logo em seguida "bom", porque o fluxo caiu no `case` \
+seguinte. É um dos bugs mais clássicos do `switch`, e fica invisível na leitura rápida.
+"""
+como_corrigir = """
+Termine cada `case` com `break` (ou `return`). Se a queda for de propósito, deixe um comentário \
+`// falls through` antes do próximo `case`, para quem ler saber que foi intencional.
+"""
+antes = '''
+export function mensagem(nota) {
+  let texto = "";
+  switch (nota) {
+    case "A":
+      texto = "ótimo";
+    case "B":
+      texto = "bom";
+      break;
+    default:
+      texto = "estude mais";
+  }
+  return texto;
+}
+'''
+depois = '''
+export function mensagem(nota) {
+  let texto = "";
+  switch (nota) {
+    case "A":
+      texto = "ótimo";
+      break;
+    case "B":
+      texto = "bom";
+      break;
+    default:
+      texto = "estude mais";
+  }
+  return texto;
+}
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra no-fallthrough no ESLint"
+url = "https://eslint.org/docs/latest/rules/no-fallthrough"
+
+[[docs]]
+titulo = "MDN: switch"
+url = "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/switch"

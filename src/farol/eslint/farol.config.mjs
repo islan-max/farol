@@ -7,6 +7,10 @@ const regras = {
   "no-var": "error",
   "no-eval": "error",
   "no-empty": "error",
+  "prefer-const": "error",
+  "no-dupe-keys": "error",
+  "no-fallthrough": "error",
+  "no-unreachable": "error",
 };
 
 export default [
@@ -20,7 +24,11 @@ export default [
     files: ["**/*.{ts,tsx,mts,cts}"],
     languageOptions: { parser: tseslint.parser, parserOptions: { ecmaFeatures: { jsx: true } } },
     plugins: { "@typescript-eslint": tseslint.plugin },
-    rules: { ...regras, "@typescript-eslint/no-unused-vars": "error" },
+    rules: {
+      ...regras,
+      "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/no-explicit-any": "error",
+    },
   },
   { linterOptions: { reportUnusedDisableDirectives: "off" } },
 ];

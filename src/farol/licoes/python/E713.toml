@@ -1,0 +1,36 @@
+codigo = "E713"
+ferramenta = "ruff"
+titulo = "Use `not in` em vez de `not ... in`"
+nivel = "iniciante"
+o_que_e = """
+`if not item in vistos:` nega o resultado de `item in vistos`. O Python tem um operador próprio para isso: \
+`not in`.
+"""
+por_que_importa = """
+O resultado é o mesmo, mas `item not in vistos` lê como uma frase e evita a confusão com \
+`(not item) in vistos`, que é outra coisa e um erro comum. Todo código Python que você vai ler usa a forma \
+com `not in`.
+"""
+como_corrigir = """
+Troque `not x in y` por `x not in y`. O mesmo vale para `is not`: escreva `x is not None`, não \
+`not x is None`.
+"""
+antes = '''
+def registrar(item, vistos):
+    if not item in vistos:
+        vistos.append(item)
+'''
+depois = '''
+def registrar(item, vistos):
+    if item not in vistos:
+        vistos.append(item)
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra E713 no ruff"
+url = "https://docs.astral.sh/ruff/rules/not-in-test/"
+
+[[docs]]
+titulo = "PEP 8: recomendações de programação"
+url = "https://peps.python.org/pep-0008/#programming-recommendations"

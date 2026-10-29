@@ -16,9 +16,10 @@ from farol.achados import Achado
 
 FONTE = Path(__file__).resolve().parent.parent / "eslint"
 TIMEOUT_S = 60
+ARQUIVOS = ("package.json", "package-lock.json", "farol.config.mjs")
 EXTENSOES = (".js", ".mjs", ".cjs", ".jsx", ".ts", ".mts", ".cts", ".tsx")
 # O plugin do TypeScript troca a regra base; para quem aprende é a mesma lição.
-NOMES = {"@typescript-eslint/no-unused-vars": "no-unused-vars"}
+NOMES = {"@typescript-eslint/no-unused-vars": "no-unused-vars"}  # mesma lição, regra do TS
 
 
 class FerramentaIndisponivel(RuntimeError):
@@ -27,7 +28,9 @@ class FerramentaIndisponivel(RuntimeError):
 
 def _cache() -> Path:
     base = Path(os.environ.get("FAROL_CACHE") or Path.home() / ".cache" / "farol")
-    chave = hashlib.sha256((FONTE / "package-lock.json").read_bytes()).hexdigest()[:12]
+    # A configuração entra na chave: mudou a regra, mudou a pasta (senão ficaria a antiga em cache).
+    conteudo = b"".join((FONTE / n).read_bytes() for n in ARQUIVOS)
+    chave = hashlib.sha256(conteudo).hexdigest()[:12]
     return base / f"eslint-{chave}"
 
 
@@ -38,7 +41,7 @@ def preparar() -> Path:
     if not (shutil.which("node") and shutil.which("npm")):
         raise FerramentaIndisponivel("JavaScript e TypeScript precisam do Node.js 20 ou mais novo")
     destino.mkdir(parents=True, exist_ok=True)
-    for nome in ("package.json", "package-lock.json", "farol.config.mjs"):
+    for nome in ARQUIVOS:
         shutil.copy(FONTE / nome, destino / nome)
     proc = subprocess.run(  # noqa: S603 - comando fixo, sem entrada de fora
         [shutil.which("npm"), "ci", "--ignore-scripts", "--no-audit", "--no-fund"],
@@ -71,8 +74,14 @@ def analisar(path: str, source: str, linhas: set[int] | None = None) -> list[Ach
         if msg.get("fatal") or not msg.get("ruleId"):
             codigo, url = None, None
         else:
-            codigo = NOMES.get(msg["ruleId"], msg["ruleId"])
-            url = f"https://eslint.org/docs/latest/rules/{codigo}"
+            regra = msg["ruleId"]
+            codigo = NOMES.get(regra, regra.removeprefix("@typescript-eslint/"))
+            so_do_ts = regra.startswith("@typescript-eslint/") and regra not in NOMES
+            url = (
+                f"https://typescript-eslint.io/rules/{codigo}/"
+                if so_do_ts
+                else f"https://eslint.org/docs/latest/rules/{codigo}"
+            )
         if linhas is None or msg["line"] in linhas:
             achados.append(Achado(path, msg["line"], "eslint", codigo, msg["message"], url))
     # Erro de sintaxe: só o primeiro; os seguintes costumam ser cascata.

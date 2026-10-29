@@ -1,0 +1,38 @@
+codigo = "prefer-const"
+ferramenta = "eslint"
+linguagem = "javascript"
+titulo = "Use `const` quando o valor não muda"
+nivel = "iniciante"
+o_que_e = """
+Uma variável declarada com `let` que nunca recebe um valor novo depois de criada.
+"""
+por_que_importa = """
+O `const` avisa a quem lê, e ao próprio JavaScript, que aquele nome não será reatribuído. Se alguém tentar \
+mudar o valor por engano, o erro aparece na hora, e o código fica mais fácil de seguir: cada `let` que sobra \
+significa "este valor muda em algum lugar".
+"""
+como_corrigir = """
+Use `const` por padrão e deixe o `let` só para o que realmente muda. Atenção: `const` impede **reatribuir** o \
+nome, mas não impede alterar o conteúdo de um objeto ou de uma lista.
+"""
+antes = '''
+export function area(raio) {
+  let pi = 3.14159;
+  return pi * raio * raio;
+}
+'''
+depois = '''
+export function area(raio) {
+  const pi = 3.14159;
+  return pi * raio * raio;
+}
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra prefer-const no ESLint"
+url = "https://eslint.org/docs/latest/rules/prefer-const"
+
+[[docs]]
+titulo = "MDN: const"
+url = "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/const"

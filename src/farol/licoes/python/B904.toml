@@ -1,0 +1,39 @@
+codigo = "B904"
+ferramenta = "ruff"
+titulo = "Ao levantar outro erro dentro de `except`, use `raise ... from`"
+nivel = "intermediario"
+o_que_e = """
+Dentro de um `except`, você levanta um erro novo (`raise OutroErro(...)`) sem dizer de qual erro ele veio.
+"""
+por_que_importa = """
+O traceback mostra os dois erros separados pela frase "durante o tratamento da exceção acima, ocorreu \
+outra", o que parece um defeito no seu tratamento, e não uma tradução intencional. Com `from erro`, o Python \
+diz que a exceção anterior foi a **causa direta**, e quem depura chega à origem sem adivinhar.
+"""
+como_corrigir = """
+Capture o erro com `as erro` e levante o novo com `raise NovoErro(...) from erro`. Use `from None` só quando \
+quiser esconder o erro original de propósito.
+"""
+antes = '''
+def ler_idade(texto):
+    try:
+        return int(texto)
+    except ValueError:
+        raise TypeError("idade inválida")
+'''
+depois = '''
+def ler_idade(texto):
+    try:
+        return int(texto)
+    except ValueError as erro:
+        raise TypeError("idade inválida") from erro
+'''
+exemplos = ["B904-1"]
+
+[[docs]]
+titulo = "Regra B904 no ruff"
+url = "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except/"
+
+[[docs]]
+titulo = "Tutorial do Python: encadeamento de exceções"
+url = "https://docs.python.org/pt-br/3/tutorial/errors.html#exception-chaining"
