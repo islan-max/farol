@@ -1,4 +1,4 @@
-# farol-esperado: B006,E711,E722
+# farol-esperado: B006,E711,E722,S110
 def processar(itens, extras=[]):
     for item in itens:
         try:

@@ -1,0 +1,36 @@
+codigo = "S608"
+ferramenta = "ruff"
+titulo = "SQL montado juntando texto abre brecha para injeção de SQL"
+nivel = "intermediario"
+o_que_e = """
+A consulta é construída colando valores num texto SQL (f-string, `+`, `%` ou `.format`) em vez de \
+passá-los como parâmetros.
+"""
+por_que_importa = """
+Se o valor vem de uma pessoa usuária, ele pode conter pedaços de SQL e mudar o que a consulta faz: um nome \
+como `x' OR '1'='1` devolve todos os registros, e um valor pior pode apagar tabelas. É uma das falhas mais \
+exploradas em sistemas reais, e é simples de evitar.
+"""
+como_corrigir = """
+Use parâmetros: o driver envia o SQL e os valores separados e trata os valores sempre como dados. No \
+`sqlite3` o marcador é `?`; em outros drivers costuma ser `%s`. Nunca formate o valor dentro do texto.
+"""
+antes = '''
+def buscar(cursor, nome):
+    cursor.execute(f"SELECT * FROM usuarios WHERE nome = '{nome}'")
+    return cursor.fetchall()
+'''
+depois = '''
+def buscar(cursor, nome):
+    cursor.execute("SELECT * FROM usuarios WHERE nome = ?", (nome,))
+    return cursor.fetchall()
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra S608 no ruff"
+url = "https://docs.astral.sh/ruff/rules/hardcoded-sql-expression/"
+
+[[docs]]
+titulo = "Documentação do sqlite3: usando placeholders"
+url = "https://docs.python.org/pt-br/3/library/sqlite3.html#sqlite3-placeholders"

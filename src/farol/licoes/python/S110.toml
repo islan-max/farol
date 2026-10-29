@@ -1,0 +1,45 @@
+codigo = "S110"
+ferramenta = "ruff"
+titulo = "`try`/`except` que engole o erro em silêncio"
+nivel = "intermediario"
+o_que_e = """
+O bloco `except` só tem `pass`: o erro acontece e o programa segue como se nada tivesse ocorrido.
+"""
+por_que_importa = """
+Quando algo falha, ninguém fica sabendo: nem você, nem quem usa o programa. O resultado é um bug sem \
+mensagem (o arquivo não foi salvo e não existe nenhuma pista). Ignorar um erro às vezes é a decisão certa, \
+mas precisa ser uma decisão, não um esquecimento.
+"""
+como_corrigir = """
+Trate de verdade (valor padrão, nova tentativa, mensagem ao usuário) ou ao menos registre com \
+`logging.exception(...)`. Se ignorar for intencional, escolha o erro específico e explique em um \
+comentário; `contextlib.suppress(FileNotFoundError)` deixa a intenção explícita.
+"""
+antes = '''
+def apagar_cache(caminho):
+    try:
+        caminho.unlink()
+    except Exception:
+        pass
+'''
+depois = '''
+import logging
+
+
+def apagar_cache(caminho):
+    try:
+        caminho.unlink()
+    except FileNotFoundError:
+        pass  # já não existia; tudo certo
+    except OSError:
+        logging.exception("não consegui apagar %s", caminho)
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra S110 no ruff"
+url = "https://docs.astral.sh/ruff/rules/try-except-pass/"
+
+[[docs]]
+titulo = "Módulo logging do Python"
+url = "https://docs.python.org/pt-br/3/library/logging.html"

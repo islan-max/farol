@@ -1,0 +1,31 @@
+codigo = "F541"
+ferramenta = "ruff"
+titulo = "f-string sem nada para preencher"
+nivel = "iniciante"
+o_que_e = """
+O texto tem o prefixo `f`, mas nenhum `{}`: `f"Olá, bem-vindo!"`.
+"""
+por_que_importa = """
+Não quebra nada, mas o `f` promete uma substituição que não existe. Quase sempre é sinal de que faltou \
+colocar a variável (`f"Olá, "` em vez de `f"Olá, {nome}"`) ou de que sobrou um `f` depois de uma edição.
+"""
+como_corrigir = """
+Se faltou a variável, coloque-a entre chaves. Se o texto é fixo, tire o `f`.
+"""
+antes = '''
+def saudacao(nome):
+    return f"Olá, bem-vindo!"
+'''
+depois = '''
+def saudacao(nome):
+    return f"Olá, {nome}!"
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra F541 no ruff"
+url = "https://docs.astral.sh/ruff/rules/f-string-missing-placeholders/"
+
+[[docs]]
+titulo = "Tutorial do Python: literais de string formatados"
+url = "https://docs.python.org/pt-br/3/tutorial/inputoutput.html#formatted-string-literals"

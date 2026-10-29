@@ -17,13 +17,13 @@ def codigos(achados):
 
 def test_sem_filtro_devolve_tudo_ordenado_por_linha():
     achados = analisar("a.py", FONTE)
-    assert codigos(achados) == ["F401", "B006", "E722"]
+    assert codigos(achados) == ["F401", "B006", "E722", "S110"]
     assert [a.line for a in achados] == sorted(a.line for a in achados)
 
 
 def test_filtro_mantem_so_linhas_alteradas():
     achados = analisar("a.py", FONTE, linhas={4, 7})
-    assert codigos(achados) == ["B006", "E722"]  # o import da linha 1 não foi alterado
+    assert codigos(achados) == ["B006", "E722", "S110"]  # o import da linha 1 não foi alterado
 
 
 def test_linha_fora_do_diff_nao_gera_achado():
