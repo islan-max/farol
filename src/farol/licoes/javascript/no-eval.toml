@@ -2,6 +2,7 @@ codigo = "no-eval"
 ferramenta = "eslint"
 linguagem = "javascript"
 titulo = "Não use `eval`: ele executa texto como código"
+categoria = "seguranca"
 nivel = "intermediario"
 o_que_e = """
 `eval(texto)` pega um texto e o executa como se fosse código JavaScript.

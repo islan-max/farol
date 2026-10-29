@@ -1,6 +1,7 @@
 codigo = "S608"
 ferramenta = "ruff"
 titulo = "SQL montado juntando texto abre brecha para injeção de SQL"
+categoria = "seguranca"
 nivel = "intermediario"
 o_que_e = """
 A consulta é construída colando valores num texto SQL (f-string, `+`, `%` ou `.format`) em vez de \

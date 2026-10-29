@@ -39,6 +39,15 @@ def test_seguranca_passa_na_frente_quando_o_teto_aperta():
     assert rev.excedente[0].achado.codigo == "E722"
 
 
+def test_no_eval_do_eslint_tambem_conta_como_seguranca():
+    achados = [
+        achado(line=1, codigo="no-var", ferramenta="eslint"),
+        achado(line=9, codigo="no-eval", ferramenta="eslint"),
+    ]
+    rev = montar(achados, teto=1)
+    assert rev.inline[0].achado.codigo == "no-eval"
+
+
 def test_erro_de_sintaxe_e_um_por_arquivo_e_nao_se_junta_entre_arquivos():
     rev = montar([achado("a.py", 1, None), achado("b.py", 1, None)])
     assert len(rev.inline) == 2
