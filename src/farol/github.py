@@ -57,5 +57,8 @@ class Api:
         url = f"/repos/{repo}/contents/{urllib.parse.quote(caminho)}?ref={ref}"
         return self._pedir("GET", url, None, "application/vnd.github.raw").decode("utf-8")
 
+    def alterar(self, caminho: str, corpo: dict) -> dict:
+        return json.loads(self._pedir("PATCH", caminho, corpo, "application/vnd.github+json"))
+
     def enviar(self, caminho: str, corpo: dict) -> dict:
         return json.loads(self._pedir("POST", caminho, corpo, "application/vnd.github+json"))

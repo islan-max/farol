@@ -31,6 +31,7 @@ Opções (`with:`):
 | `teto` | `10` | Máximo de comentários por linha em um PR. O que passar disso vai agrupado, por regra, no corpo da review. |
 | `ia` | `off` | `ollama` liga uma nota extra de IA local em cada comentário. Veja abaixo. |
 | `modelo` | `qwen2.5-coder:1.5b` | Modelo do Ollama usado com `ia: ollama`. |
+| `painel` | `off` | `on` mantém a issue "Painel do Farol" (precisa de `issues: write`). Veja abaixo. |
 | `token` | `github.token` | Só mude se souber por quê. |
 
 ## O que ele faz
@@ -52,6 +53,26 @@ Opções (`with:`):
 ```
 
 O runner baixa o Ollama (conferido por sha256) e o modelo (cerca de 1 GB) e o Farol acrescenta, em cada comentário, uma nota **No seu código**, rotulada "IA local, pode errar". A IA nunca cria nem tira apontamentos, e se algo falhar o comentário sai só com a lição. Em repositório público é grátis; em **privado** consome minutos do seu plano. Medições, escolha de modelo e limites em [medicao-ia.md](medicao-ia.md).
+
+## Painel do Farol: o que se repete entre PRs (opcional)
+
+```yaml
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write          # só para o painel
+
+    steps:
+      - uses: islan-max/farol@main
+        with:
+          painel: "on"
+```
+
+A Action mantém **uma issue** "Painel do Farol" (rótulo `farol`) com, para cada pessoa, o que **se repete** (regras que apareceram em 2 ou mais PRs), o que **apareceu agora** e o que **já parece dominado** (apareceu antes e não está nos 2 PRs mais recentes, com 3 ou mais PRs revisados). O resumo da pessoa também entra no corpo da review ("Seu progresso neste repositório"), quando já há histórico.
+
+- O histórico fica em um comentário HTML no corpo da issue e guarda só o **login** (já público no PR), o **número do PR** e os **códigos das regras**. Até 30 PRs por pessoa e 50 pessoas. É regravado a cada PR revisado; dois PRs revisados no mesmo segundo podem sobrescrever um ao outro (o último vence).
+- Não roda para PR de fork nem de bot. Sem a permissão `issues: write`, o painel é pulado com um aviso e a revisão segue normal.
+- Para zerar, apague a issue ou edite o corpo.
 
 ## Linguagens
 

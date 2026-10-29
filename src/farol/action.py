@@ -15,6 +15,8 @@ from farol.comentarios import corpo, resumo_excedente
 from farol.diffs import build_input
 from farol.github import Api, GitHubError
 from farol.ia import MODELO_PADRAO, Ollama, anotar
+from farol.painel import atualizar as atualizar_painel
+from farol.painel import para_a_review
 from farol.revisao import TETO_INLINE, Revisao, montar
 
 RODAPE = (
@@ -64,7 +66,12 @@ def _achar(api: Api, repo_cabeca: str, sha: str, pr_files: list[dict]):
     return achados, nao_revisados, fontes
 
 
-def corpo_da_revisao(rev: Revisao, nao_revisados: list[tuple[str, str]], sha: str) -> str:
+def corpo_da_revisao(
+    rev: Revisao,
+    nao_revisados: list[tuple[str, str]],
+    sha: str,
+    progresso: str | None = None,
+) -> str:
     linhas = [f"## Farol: {rev.total} apontamento(s) nas linhas alteradas", ""]
     if len(rev.inline) < rev.total:
         linhas += [
@@ -80,6 +87,8 @@ def corpo_da_revisao(rev: Revisao, nao_revisados: list[tuple[str, str]], sha: st
         if len(nao_revisados) > 10:
             linhas.append(f"- e mais {len(nao_revisados) - 10} arquivo(s)")
         linhas.append("")
+    if progresso:
+        linhas += [progresso, ""]
     modelos = {c.modelo for c in rev.inline if c.nota}
     if modelos:
         quais = ", ".join(sorted(modelos))
@@ -136,6 +145,7 @@ def executar(
     caminho_resumo: str | None,
     teto: int = TETO_INLINE,
     ia: Ollama | None = None,
+    painel: bool = False,
 ) -> int:
     pr = evento["pull_request"]
     numero, sha = pr["number"], pr["head"]["sha"]
@@ -149,6 +159,13 @@ def executar(
         return 0
 
     achados, nao_revisados, fontes = _achar(api, repo_cabeca, sha, api.paginar(f"{base}/files"))
+    progresso = None
+    autor = pr.get("user") or {}
+    if painel and not de_fork and autor.get("type") != "Bot" and autor.get("login"):
+        # As regras do PR inteiro (antes de tirar as já comentadas) entram no histórico.
+        regras = {a.codigo for a in achados if a.codigo}
+        resumo = atualizar_painel(api, numero, autor["login"], regras)
+        progresso = para_a_review(resumo) if resumo else None
     if not de_fork:
         comentados = regras_ja_comentadas(api.paginar(f"{base}/comments"))
         achados = [a for a in achados if (a.codigo or "sintaxe", _hash(a.path)) not in comentados]
@@ -165,7 +182,7 @@ def executar(
                 {
                     "commit_id": sha,
                     "event": "COMMENT",
-                    "body": corpo_da_revisao(rev, nao_revisados, sha),
+                    "body": corpo_da_revisao(rev, nao_revisados, sha, progresso),
                     "comments": [comentario_inline(c) for c in rev.inline],
                 },
             )
@@ -213,6 +230,7 @@ def main() -> int:
             env.get("GITHUB_STEP_SUMMARY"),
             int(env.get("FAROL_TETO", "10")),
             _ia(env),
+            env.get("FAROL_PAINEL", "off") == "on",
         )
     except GitHubError as erro:
         print(f"Erro ao falar com o GitHub: {erro}", file=sys.stderr)

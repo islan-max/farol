@@ -49,7 +49,8 @@ uvx --from git+https://github.com/islan-max/farol farol explicar E722
 - As regras são as do Farol; a configuração de lint do seu repositório é ignorada de propósito.
 - Hoje: **17 lições de Python** e **10 de JavaScript/TypeScript**; 6 delas têm exemplo real de projeto aberto, com link para o commit e licença.
 - Código sem lição escrita não é apontado. Se uma ferramenta acha algo que o Farol ainda não explica, ele não inventa explicação.
-- Fora do MVP, de propósito: IA local e resumo entre PRs. Veja [docs/fase-2.md](docs/fase-2.md).
+- Opcionais, desligados por padrão: **IA local** (nota "No seu código", rotulada; [medições](docs/medicao-ia.md)) e **Painel do Farol** (o que se repete e o que já parece dominado, entre PRs; [como ligar](docs/usar-action.md)).
+- O que ficou de fora e por quê: [docs/fase-2.md](docs/fase-2.md).
 
 ## Segurança e privacidade
 

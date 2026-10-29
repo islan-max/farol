@@ -21,6 +21,11 @@ inputs:
   modelo:
     description: Modelo do Ollama usado quando ia é "ollama".
     default: "qwen2.5-coder:1.5b"
+  painel:
+    description: >-
+      "on" mantém uma issue "Painel do Farol" com o que se repete e o que já parece dominado em
+      cada pessoa, ao longo dos PRs. Precisa da permissão issues: write. "off" (padrão) não faz nada.
+    default: "off"
 
 runs:
   using: composite
@@ -39,4 +44,5 @@ runs:
         FAROL_TETO: ${{ inputs.teto }}
         FAROL_IA: ${{ inputs.ia }}
         FAROL_MODELO: ${{ inputs.modelo }}
+        FAROL_PAINEL: ${{ inputs.painel }}
       run: uv run --locked --no-dev --project "$GITHUB_ACTION_PATH" python -m farol.action
