@@ -1,0 +1,25 @@
+name: Farol
+description: Revisão de pull request que ensina, em português do Brasil. Sem IA e sem chave de API.
+author: islan-max
+branding:
+  icon: sun
+  color: yellow
+
+inputs:
+  token:
+    description: Token usado para ler o PR e comentar. O padrão já serve.
+    default: ${{ github.token }}
+  teto:
+    description: Máximo de comentários por linha em um PR.
+    default: "10"
+
+runs:
+  using: composite
+  steps:
+    - uses: astral-sh/setup-uv@v10.3.2
+    - name: Revisar o pull request
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        FAROL_TETO: ${{ inputs.teto }}
+      run: uv run --locked --no-dev --project "$GITHUB_ACTION_PATH" python -m farol.action
