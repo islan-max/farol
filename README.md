@@ -30,7 +30,7 @@ jobs:
   farol:
     runs-on: ubuntu-latest
     steps:
-      - uses: islan-max/farol@main
+      - uses: islan-max/farol@v0
 ```
 
 **Linha de comando** (precisa do [uv](https://docs.astral.sh/uv/) e de um repositório git):
