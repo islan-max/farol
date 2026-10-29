@@ -1,0 +1,45 @@
+name: Falso positivo ou comentário errado
+description: O Farol apontou algo que não é um problema, ou explicou errado.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado por relatar. Comentários errados fazem o Farol perder a confiança de quem está aprendendo, então isto é importante.
+  - type: input
+    id: regra
+    attributes:
+      label: Regra
+      description: O código que aparece no comentário (por exemplo, `E722` ou `no-var`).
+    validations:
+      required: true
+  - type: textarea
+    id: codigo
+    attributes:
+      label: Trecho de código
+      description: O menor trecho que reproduz (sem segredos). Se puder, cole o link do PR.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: O que você esperava
+    validations:
+      required: true
+  - type: dropdown
+    id: como
+    attributes:
+      label: Onde aconteceu
+      options:
+        - GitHub Action
+        - Linha de comando
+        - Site (Teste agora)
+        - Nota de IA local
+    validations:
+      required: true
+  - type: input
+    id: versao
+    attributes:
+      label: Versão
+      description: A tag usada (por exemplo, `v0`) ou a saída de `farol --version`.

@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Perguntas e ideias
+    url: https://github.com/islan-max/farol/discussions
+    about: Dúvidas de uso, ideias e conversas ficam nas Discussões.
+  - name: Vulnerabilidade de segurança
+    url: https://github.com/islan-max/farol/security/advisories/new
+    about: Relate em particular; não abra uma issue pública.
+  - name: Teste o Farol no navegador
+    url: https://islan-max.github.io/farol/teste.html
+    about: Cole um trecho de Python e veja as lições, sem instalar nada.

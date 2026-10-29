@@ -1,0 +1,33 @@
+name: Sugerir uma lição
+description: Uma regra comum entre iniciantes que o Farol ainda não explica.
+labels: ["lição"]
+body:
+  - type: input
+    id: regra
+    attributes:
+      label: Regra e ferramenta
+      description: Por exemplo, `B007` (ruff) ou `no-redeclare` (ESLint).
+    validations:
+      required: true
+  - type: textarea
+    id: erro
+    attributes:
+      label: Que erro de iniciante é esse?
+      description: Um exemplo de código que dispara a regra.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: porque
+    attributes:
+      label: Por que importa
+      description: O que quebra de verdade, em uma ou duas frases.
+    validations:
+      required: true
+  - type: checkboxes
+    id: ajuda
+    attributes:
+      label: Posso ajudar?
+      options:
+        - label: Quero escrever a lição (veja docs/escrever-licao.md)
+        - label: Sei de um exemplo real em um projeto aberto
