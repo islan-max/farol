@@ -33,7 +33,7 @@ def ler_idade(texto):
         idade = 0
     return idade
 '''
-exemplos = []
+exemplos = ["E722-1"]
 
 [[docs]]
 titulo = "Regra E722 no ruff"

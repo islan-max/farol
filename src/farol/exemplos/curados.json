@@ -1,0 +1,47 @@
+[
+  {
+    "id": "B006-1",
+    "regra": "B006",
+    "repo": "django/django",
+    "licenca": "BSD-3-Clause",
+    "permalink": "https://github.com/django/django/blob/817df1c4d6d38f416460d7d9354d7deab9d35139/django/http/response.py#L786-L789",
+    "trecho": "        if json_dumps_params is None:\n            json_dumps_params = {}\n        kwargs.setdefault(\"content_type\", \"application/json\")\n        data = json.dumps(data, cls=encoder, **json_dumps_params)",
+    "porque": "O argumento vale None na assinatura (json_dumps_params=None) e o dicionário novo é criado dentro da função, a cada chamada."
+  },
+  {
+    "id": "E722-1",
+    "regra": "E722",
+    "repo": "django/django",
+    "licenca": "BSD-3-Clause",
+    "permalink": "https://github.com/django/django/blob/817df1c4d6d38f416460d7d9354d7deab9d35139/django/contrib/gis/gdal/srs.py#L211-L214",
+    "trecho": "        try:\n            return int(self.auth_code(target=None))\n        except (TypeError, ValueError):\n            return None",
+    "porque": "Captura só TypeError e ValueError, os dois erros que int() pode levantar aqui, e devolve None; qualquer outro problema continua aparecendo."
+  },
+  {
+    "id": "S110-1",
+    "regra": "S110",
+    "repo": "pytest-dev/pytest",
+    "licenca": "MIT",
+    "permalink": "https://github.com/pytest-dev/pytest/blob/a7b2446ee41a7298d3a0bc22c52f3b8bacae1566/src/_pytest/pathlib.py#L369-L375",
+    "trecho": "            # We want to ignore any errors while trying to remove the lock such as:\n            # - PermissionDenied, like the file permissions have changed since the lock creation;\n            # - FileNotFoundError, in case another pytest process got here first;\n            # and any other cause of failure.\n            with contextlib.suppress(OSError):\n                lock.unlink()\n                return True",
+    "porque": "Ignorar o erro foi uma decisão: o comentário diz quais falhas são esperadas e o contextlib.suppress deixa isso explícito, só para OSError."
+  },
+  {
+    "id": "S105-1",
+    "regra": "S105",
+    "repo": "django/django",
+    "licenca": "BSD-3-Clause",
+    "permalink": "https://github.com/django/django/blob/817df1c4d6d38f416460d7d9354d7deab9d35139/scripts/pr_limit/check_pr.py#L161-L170",
+    "trecho": "if __name__ == \"__main__\":\n    logging.basicConfig(level=logging.INFO, format=\"%(levelname)s: %(message)s\")\n    sys.exit(\n        main(\n            repo=os.environ[\"PR_REPO\"],\n            token=os.environ[\"GITHUB_TOKEN\"],\n            pr_number=os.environ[\"PR_NUMBER\"],\n            autoclose=os.environ.get(\"AUTOCLOSE\", \"\").lower() == \"true\",\n        )\n    )",
+    "porque": "O token do GitHub e os outros valores vêm de variáveis de ambiente (os.environ), nunca escritos no arquivo que vai para o Git."
+  },
+  {
+    "id": "S608-1",
+    "regra": "S608",
+    "repo": "django/django",
+    "licenca": "BSD-3-Clause",
+    "permalink": "https://github.com/django/django/blob/817df1c4d6d38f416460d7d9354d7deab9d35139/django/db/backends/mysql/introspection.py#L284-L288",
+    "trecho": "                c.constraint_type != 'CHECK' AND\n                kc.table_name = %s\n            ORDER BY kc.`ordinal_position`\n        \"\"\"\n        cursor.execute(name_query, [table_name])",
+    "porque": "O valor entra pelo marcador %s e é entregue separado, na lista do execute(); a consulta nunca é montada juntando texto."
+  }
+]

@@ -1,5 +1,6 @@
 """Texto (Markdown) dos comentários: o mesmo na CLI, na Action e nos testes."""
 
+from farol.exemplos import da_licao
 from farol.licoes import Licao
 from farol.revisao import Comentario, Revisao
 
@@ -32,6 +33,16 @@ def corpo_licao(lc: Licao) -> str:
         lc.depois,
         "```",
     ]
+    for ex in da_licao(lc.exemplos):
+        partes += [
+            "",
+            f"**Como projetos reais resolvem.** {ex.porque}",
+            "",
+            "```python",
+            ex.trecho,
+            "```",
+            f"[{ex.repo}]({ex.permalink}) · licença {ex.licenca}",
+        ]
     if lc.docs:
         links = " · ".join(f"[{d['titulo']}]({d['url']})" for d in lc.docs)
         partes += ["", f"Para ler mais: {links}"]

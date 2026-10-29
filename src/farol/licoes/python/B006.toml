@@ -26,7 +26,7 @@ def adicionar(item, itens=None):
     itens.append(item)
     return itens
 '''
-exemplos = []
+exemplos = ["B006-1"]
 
 [[docs]]
 titulo = "Regra B006 no ruff"

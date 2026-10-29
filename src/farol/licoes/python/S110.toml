@@ -34,7 +34,7 @@ def apagar_cache(caminho):
     except OSError:
         logging.exception("não consegui apagar %s", caminho)
 '''
-exemplos = []
+exemplos = ["S110-1"]
 
 [[docs]]
 titulo = "Regra S110 no ruff"
