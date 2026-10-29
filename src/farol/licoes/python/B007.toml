@@ -25,7 +25,7 @@ def repetir():
     for _ in range(3):
         print("oi")
 '''
-exemplos = []
+exemplos = ["B007-1"]
 
 [[docs]]
 titulo = "Regra B007 no ruff"

@@ -20,7 +20,7 @@ depois = '''
 def dobro(x):
     return x * 2
 '''
-exemplos = []
+exemplos = ["E731-1"]
 
 [[docs]]
 titulo = "Regra E731 no ruff"

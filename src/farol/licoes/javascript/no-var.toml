@@ -33,7 +33,7 @@ function somar(lista) {
   return total;
 }
 '''
-exemplos = []
+exemplos = ["no-var-1"]
 
 [[docs]]
 titulo = "Regra no-var no ESLint"

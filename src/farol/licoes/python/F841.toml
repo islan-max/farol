@@ -23,7 +23,7 @@ depois = '''
 def total_com_frete(precos, frete):
     return sum(precos) + frete
 '''
-exemplos = []
+exemplos = ["F841-1"]
 
 [[docs]]
 titulo = "Regra F841 no ruff"

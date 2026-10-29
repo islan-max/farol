@@ -146,19 +146,19 @@ As lições são o produto. Em cada uma, o exemplo **"antes" dispara a regra na 
 | Regra | Lição | Nível | Exemplo real |
 | --- | --- | --- | :---: |
 | [`B006`](https://islan-max.github.io/farol/licoes/B006.html) | Valor padrão mutável em argumento de função | intermediário | ✔ |
-| [`B007`](https://islan-max.github.io/farol/licoes/B007.html) | Variável de laço que nunca é usada | iniciante |  |
+| [`B007`](https://islan-max.github.io/farol/licoes/B007.html) | Variável de laço que nunca é usada | iniciante | ✔ |
 | [`B904`](https://islan-max.github.io/farol/licoes/B904.html) | Ao levantar outro erro dentro de `except`, use `raise ... from` | intermediário | ✔ |
-| [`E711`](https://islan-max.github.io/farol/licoes/E711.html) | Compare com `None` usando `is` | iniciante |  |
+| [`E711`](https://islan-max.github.io/farol/licoes/E711.html) | Compare com `None` usando `is` | iniciante | ✔ |
 | [`E712`](https://islan-max.github.io/farol/licoes/E712.html) | Não compare com `True` ou `False` | iniciante |  |
-| [`E713`](https://islan-max.github.io/farol/licoes/E713.html) | Use `not in` em vez de `not ... in` | iniciante |  |
+| [`E713`](https://islan-max.github.io/farol/licoes/E713.html) | Use `not in` em vez de `not ... in` | iniciante | ✔ |
 | [`E722`](https://islan-max.github.io/farol/licoes/E722.html) | `except:` sem tipo captura erro demais | iniciante | ✔ |
-| [`E731`](https://islan-max.github.io/farol/licoes/E731.html) | Não atribua uma `lambda` a um nome | iniciante |  |
+| [`E731`](https://islan-max.github.io/farol/licoes/E731.html) | Não atribua uma `lambda` a um nome | iniciante | ✔ |
 | [`E741`](https://islan-max.github.io/farol/licoes/E741.html) | Nome de variável fácil de confundir (`l`, `O`, `I`) | iniciante |  |
-| [`F401`](https://islan-max.github.io/farol/licoes/F401.html) | Import que não é usado | iniciante |  |
+| [`F401`](https://islan-max.github.io/farol/licoes/F401.html) | Import que não é usado | iniciante | ✔ |
 | [`F541`](https://islan-max.github.io/farol/licoes/F541.html) | f-string sem nada para preencher | iniciante |  |
 | [`F811`](https://islan-max.github.io/farol/licoes/F811.html) | Nome definido duas vezes: a primeira definição nunca é usada | intermediário |  |
 | [`F821`](https://islan-max.github.io/farol/licoes/F821.html) | Nome que não existe nesse ponto do código | iniciante |  |
-| [`F841`](https://islan-max.github.io/farol/licoes/F841.html) | Variável criada e nunca usada | iniciante |  |
+| [`F841`](https://islan-max.github.io/farol/licoes/F841.html) | Variável criada e nunca usada | iniciante | ✔ |
 | [`S105`](https://islan-max.github.io/farol/licoes/S105.html) | Senha escrita direto no código | iniciante | ✔ |
 | [`S110`](https://islan-max.github.io/farol/licoes/S110.html) | `try`/`except` que engole o erro em silêncio | intermediário | ✔ |
 | [`S113`](https://islan-max.github.io/farol/licoes/S113.html) | Chamada de rede sem `timeout` pode travar para sempre | intermediário | ✔ |
@@ -171,17 +171,17 @@ As lições são o produto. Em cada uma, o exemplo **"antes" dispara a regra na 
 
 | Regra | Lição | Nível | Exemplo real |
 | --- | --- | --- | :---: |
-| [`eqeqeq`](https://islan-max.github.io/farol/licoes/eqeqeq.html) | Use `===` em vez de `==` | iniciante |  |
+| [`eqeqeq`](https://islan-max.github.io/farol/licoes/eqeqeq.html) | Use `===` em vez de `==` | iniciante | ✔ |
 | [`no-const-assign`](https://islan-max.github.io/farol/licoes/no-const-assign.html) | Não dá para reatribuir uma variável `const` | iniciante |  |
 | [`no-dupe-keys`](https://islan-max.github.io/farol/licoes/no-dupe-keys.html) | Chave repetida em um objeto | iniciante |  |
-| [`no-empty`](https://islan-max.github.io/farol/licoes/no-empty.html) | Bloco vazio, em especial `catch` que engole o erro | intermediário |  |
+| [`no-empty`](https://islan-max.github.io/farol/licoes/no-empty.html) | Bloco vazio, em especial `catch` que engole o erro | intermediário | ✔ |
 | [`no-eval`](https://islan-max.github.io/farol/licoes/no-eval.html) | Não use `eval`: ele executa texto como código | intermediário |  |
-| [`no-explicit-any`](https://islan-max.github.io/farol/licoes/no-explicit-any.html) | Evite `any` no TypeScript | intermediário |  |
+| [`no-explicit-any`](https://islan-max.github.io/farol/licoes/no-explicit-any.html) | Evite `any` no TypeScript | intermediário | ✔ |
 | [`no-fallthrough`](https://islan-max.github.io/farol/licoes/no-fallthrough.html) | `case` sem `break` cai no caso seguinte | intermediário | ✔ |
 | [`no-unreachable`](https://islan-max.github.io/farol/licoes/no-unreachable.html) | Código depois de `return` nunca roda | iniciante |  |
-| [`no-unused-vars`](https://islan-max.github.io/farol/licoes/no-unused-vars.html) | Variável ou import que nunca é usado | iniciante |  |
-| [`no-var`](https://islan-max.github.io/farol/licoes/no-var.html) | Prefira `let` e `const` a `var` | iniciante |  |
-| [`prefer-const`](https://islan-max.github.io/farol/licoes/prefer-const.html) | Use `const` quando o valor não muda | iniciante |  |
+| [`no-unused-vars`](https://islan-max.github.io/farol/licoes/no-unused-vars.html) | Variável ou import que nunca é usado | iniciante | ✔ |
+| [`no-var`](https://islan-max.github.io/farol/licoes/no-var.html) | Prefira `let` e `const` a `var` | iniciante | ✔ |
+| [`prefer-const`](https://islan-max.github.io/farol/licoes/prefer-const.html) | Use `const` quando o valor não muda | iniciante | ✔ |
 
 </details>
 <!-- licoes:fim -->

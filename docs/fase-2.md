@@ -12,7 +12,7 @@ Implementado como a issue "Painel do Farol" (opcional, `painel: on`). Veja [usar
 
 ## O que continua fora
 
-- Mais lições (hoje 17 de Python e 10 de JavaScript/TypeScript) e mais exemplos reais (hoje 7 lições têm exemplo). A ferramenta `scripts/buscar_exemplos.py` existe para isso; a lição de `S113` ficou sem exemplo porque nenhum trecho achado era bom.
+- Mais lições (hoje 18 de Python e 11 de JavaScript/TypeScript). 20 das 29 têm exemplo real; as outras 9 (`E712`, `E741`, `F541`, `F811`, `F821`, `no-dupe-keys`, `no-unreachable`, `no-const-assign` e `no-eval`) ficam sem exemplo de propósito: o jeito certo é só **não cometer o erro**, então um trecho de projeto real não ensinaria nada.
 - Publicar no PyPI (`uvx farol`): precisa do nome reservado e de um token, que são do mantenedor.
 - Avaliar as notas da IA com uma segunda pessoa e em código de iniciante de verdade (o 7B já foi medido em 48 notas), e medir o runner de repositório privado.
 - "Teste agora" para JavaScript/TypeScript no navegador: não verifiquei se existe um build de ESLint para o navegador que valha o peso.
