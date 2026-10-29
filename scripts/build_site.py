@@ -139,6 +139,7 @@ def construir() -> None:
         shutil.rmtree(filho) if filho.is_dir() else filho.unlink()
     catalogo = sorted(todas().values(), key=lambda lc: (lc.ferramenta, lc.codigo))
     python = [lc for lc in catalogo if lc.ferramenta == "ruff"]
+    javascript = [lc for lc in catalogo if lc.ferramenta == "eslint"]
     amostra = next(lc for lc in python if lc.codigo == "E722")
 
     # --- ativos ---
@@ -186,13 +187,13 @@ Para quem está aprendendo e recebeu “LGTM” ou nada.</p>
 </ol>
 <h2>O que ele não faz</h2>
 <div class="grade">
-<div class="cartao"><h3>Não usa IA</h3><p>A análise vem do <a href="https://docs.astral.sh/ruff/">ruff</a>. Nada de resposta inventada: se o Farol aponta, a ferramenta apontou.</p></div>
+<div class="cartao"><h3>Não usa IA</h3><p>A análise vem do <a href="https://docs.astral.sh/ruff/">ruff</a> (Python) e do <a href="https://eslint.org/">ESLint</a> (JavaScript e TypeScript). Nada de resposta inventada: se o Farol aponta, a ferramenta apontou.</p></div>
 <div class="cartao"><h3>Não executa seu código</h3><p>Ele só lê o texto do PR. Também recusa rodar em <code>pull_request_target</code>.</p></div>
 <div class="cartao"><h3>Não pede chave nem conta</h3><p>Funciona com o token que o próprio GitHub Actions já dá. Grátis em repositório público.</p></div>
 </div>
 <h2>Lições escritas à mão e testadas</h2>
-<p>Hoje são {len(python)} lições para Python. Em cada uma, o exemplo “antes” realmente dispara a regra
-e o “depois” não: isso é conferido por teste automático.</p>
+<p>Hoje são {len(python)} lições para Python e {len(javascript)} para JavaScript e TypeScript. Em cada uma,
+o exemplo “antes” realmente dispara a regra e o “depois” não: isso é conferido por teste automático.</p>
 <p><a href="licoes/index.html">Ver todas as lições</a></p>""",
         ativo="index.html",
     )
@@ -220,24 +221,26 @@ Num PR de verdade o Farol olha só as linhas alteradas; aqui ele olha o trecho i
     )
 
     por_nivel = ""
-    for chave, rotulo in NIVEIS.items():
-        grupo = [lc for lc in python if lc.nivel == chave]
-        if grupo:
-            linhas = "".join(
-                f'<li><a href="{esc(lc.codigo)}.html"><span class="codigo-regra">{esc(lc.codigo)}</span>'
-                f'<span class="titulo-licao">{md(lc.titulo)}</span></a></li>'
-                for lc in grupo
-            )
-            por_nivel += f'<h2>Nível {rotulo}</h2><ul class="lista-licoes">{linhas}</ul>'
+    for nome, grupo_linguagem in (("Python", python), ("JavaScript e TypeScript", javascript)):
+        por_nivel += f"<h2>{nome}</h2>"
+        for chave, rotulo in NIVEIS.items():
+            grupo = [lc for lc in grupo_linguagem if lc.nivel == chave]
+            if grupo:
+                linhas = "".join(
+                    f'<li><a href="{esc(lc.codigo)}.html"><span class="codigo-regra">{esc(lc.codigo)}</span>'
+                    f'<span class="titulo-licao">{md(lc.titulo)}</span></a></li>'
+                    for lc in grupo
+                )
+                por_nivel += f'<h3>Nível {rotulo}</h3><ul class="lista-licoes">{linhas}</ul>'
     pagina(
         "licoes/index.html",
-        "Lições de Python | Farol",
-        f'<h1>Lições de Python</h1><p class="texto">{len(python)} lições, cada uma com o erro, o motivo e a correção.</p>{por_nivel}',
-        "Catálogo das lições do Farol para Python, por nível.",
+        "Lições | Farol",
+        f'<h1>Lições</h1><p class="texto">{len(python) + len(javascript)} lições, cada uma com o erro, o motivo e a correção.</p>{por_nivel}',
+        "Catálogo das lições do Farol para Python, JavaScript e TypeScript, por nível.",
         nivel=1,
         ativo="licoes/index.html",
     )
-    for lc in python:
+    for lc in python + javascript:
         pagina(
             f"licoes/{lc.codigo}.html",
             f"{lc.titulo} ({lc.codigo}) | Farol",
@@ -261,7 +264,7 @@ Num PR de verdade o Farol olha só as linhas alteradas; aqui ele olha o trecho i
     )
 
     paginas = ["", "teste.html", "usar.html", "licoes/"] + [
-        f"licoes/{lc.codigo}.html" for lc in python
+        f"licoes/{lc.codigo}.html" for lc in python + javascript
     ]
     (SAIDA / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
@@ -273,7 +276,7 @@ Num PR de verdade o Farol olha só as linhas alteradas; aqui ele olha o trecho i
     (SAIDA / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\n\nSitemap: {URL}sitemap.xml\n", encoding="utf-8", newline="\n"
     )
-    print(f"Site gerado em {SAIDA} ({len(python)} lições).")
+    print(f"Site gerado em {SAIDA} ({len(python) + len(javascript)} lições).")
 
 
 USAR = f"""<h1>Como usar</h1>
@@ -307,7 +310,9 @@ uvx --from git+{REPO} farol revisar --base main
 uvx --from git+{REPO} farol explicar E722</code></pre>
 <p>Precisa do <a href="https://docs.astral.sh/uv/">uv</a> e de um repositório git. <code>--json</code> dá a saída para outros programas.</p>
 <h2>Linguagens</h2>
-<p>Python hoje. JavaScript e TypeScript vêm em seguida.</p>
+<p>Python (ruff) e JavaScript/TypeScript (ESLint com typescript-eslint). Arquivos <code>.js</code>, <code>.jsx</code>,
+<code>.mjs</code>, <code>.cjs</code>, <code>.ts</code> e <code>.tsx</code> são revisados na Action e na linha de comando, que precisam
+do Node.js (já vem nos runners do GitHub). O “Teste agora” do site roda só Python.</p>
 <p>Mais detalhes na <a href="{REPO}/tree/main/docs">documentação do repositório</a>.</p>
 </div>"""
 

@@ -1,0 +1,36 @@
+codigo = "eqeqeq"
+ferramenta = "eslint"
+linguagem = "javascript"
+titulo = "Use `===` em vez de `==`"
+nivel = "iniciante"
+o_que_e = """
+O `==` converte os tipos antes de comparar. O `===` compara o valor **e** o tipo, sem conversão nenhuma.
+"""
+por_que_importa = """
+Com `==` o JavaScript decide sozinho como converter: `0 == ""` é verdadeiro, `"1" == 1` é verdadeiro e \
+`null == undefined` também. Essas regras surpreendem e escondem bugs, principalmente quando o valor vem de \
+um formulário (que sempre entrega texto).
+"""
+como_corrigir = """
+Use `===` e `!==`. Se o valor vem de um campo de texto e você espera um número, converta de forma explícita \
+antes de comparar: `Number(campo) === 3`.
+"""
+antes = '''
+function ehAdulto(idade) {
+  return idade == 18;
+}
+'''
+depois = '''
+function ehAdulto(idade) {
+  return Number(idade) === 18;
+}
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra eqeqeq no ESLint"
+url = "https://eslint.org/docs/latest/rules/eqeqeq"
+
+[[docs]]
+titulo = "MDN: comparações de igualdade"
+url = "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Equality_comparisons_and_sameness"

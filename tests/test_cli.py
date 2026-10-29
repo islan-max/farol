@@ -96,3 +96,13 @@ def test_revisar_fora_de_repositorio_git_da_erro_claro(tmp_path, monkeypatch, ca
     monkeypatch.chdir(tmp_path)
     assert main(["revisar"]) == 2
     assert capsys.readouterr().err.startswith("Erro:")
+
+
+def test_revisar_comenta_typescript_com_licao_de_javascript(repo, capsys):
+    (repo / "app.ts").write_text("const a: number = 1;\nvar b = a == 2;\n", encoding="utf-8")
+    subprocess.run(["git", "add", "-N", "app.ts"], cwd=repo, check=True)  # noqa: S603, S607
+    assert main(["revisar", "--json"]) == 0
+    dados = json.loads(capsys.readouterr().out)
+    assert {c["codigo"] for c in dados["comentarios"]} == {"no-var", "eqeqeq", "no-unused-vars"}
+    assert main(["explicar", "eqeqeq"]) == 0
+    assert "```javascript" in capsys.readouterr().out

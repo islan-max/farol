@@ -1,0 +1,35 @@
+codigo = "no-unused-vars"
+ferramenta = "eslint"
+linguagem = "javascript"
+titulo = "Variável ou parâmetro que nunca é usado"
+nivel = "iniciante"
+o_que_e = """
+Você declara uma variável, um parâmetro ou um import, mas nenhuma linha lê esse nome depois.
+"""
+por_que_importa = """
+Quase sempre é um sinal: ou sobrou código de uma ideia antiga, ou você esqueceu de usar o resultado, o que é \
+um bug de verdade (calcular o total com o frete e devolver o total sem o frete). Mesmo quando é inofensivo, \
+faz quem lê procurar para que aquilo serve.
+"""
+como_corrigir = """
+Se o valor é necessário, use-o. Se não é, apague a variável ou o parâmetro. Para um parâmetro que a \
+assinatura exige mas você não usa, o costume é nomeá-lo com `_` na frente (`_frete`) e configurar a \
+ferramenta para aceitar esse padrão.
+"""
+antes = '''
+export function total(precos, frete) {
+  const soma = precos.reduce((a, b) => a + b, 0);
+  const media = soma / precos.length;
+  return soma;
+}
+'''
+depois = '''
+export function total(precos) {
+  return precos.reduce((a, b) => a + b, 0);
+}
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra no-unused-vars no ESLint"
+url = "https://eslint.org/docs/latest/rules/no-unused-vars"

@@ -1,0 +1,11 @@
+{
+  "name": "farol-eslint",
+  "private": true,
+  "type": "module",
+  "description": "ESLint e typescript-eslint fixados, usados pelo Farol para revisar JavaScript e TypeScript.",
+  "dependencies": {
+    "eslint": "10.13.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1"
+  }
+}

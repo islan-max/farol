@@ -1,0 +1,46 @@
+codigo = "no-empty"
+ferramenta = "eslint"
+linguagem = "javascript"
+titulo = "Bloco vazio, em especial `catch` que engole o erro"
+nivel = "intermediario"
+o_que_e = """
+Um bloco `{ }` sem nada dentro. O caso mais perigoso é o `catch` vazio: o erro acontece e o programa segue \
+como se nada tivesse ocorrido.
+"""
+por_que_importa = """
+Quando algo falha, ninguém fica sabendo, nem você nem quem usa o programa. O resultado é um bug sem \
+mensagem: o dado não foi lido e não existe nenhuma pista. Ignorar um erro às vezes é a decisão certa, mas \
+precisa ser uma decisão, não um esquecimento.
+"""
+como_corrigir = """
+Trate o erro (um valor padrão, uma mensagem para a pessoa) ou ao menos registre com `console.error(erro)`. \
+Se ignorar for intencional, escreva um comentário dentro do bloco explicando o motivo; o ESLint aceita um \
+bloco que tenha comentário.
+"""
+antes = '''
+function lerConfig(texto) {
+  try {
+    return JSON.parse(texto);
+  } catch (erro) {
+  }
+}
+'''
+depois = '''
+function lerConfig(texto) {
+  try {
+    return JSON.parse(texto);
+  } catch (erro) {
+    console.error("Configuração inválida:", erro);
+    return {};
+  }
+}
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra no-empty no ESLint"
+url = "https://eslint.org/docs/latest/rules/no-empty"
+
+[[docs]]
+titulo = "MDN: try...catch"
+url = "https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/try...catch"

@@ -33,6 +33,8 @@ jobs:
         run: |
           uv export --locked --no-dev --no-emit-project --no-hashes -o requirements-prod.txt
           uvx pip-audit -r requirements-prod.txt --no-deps --disable-pip
+      - name: Auditar dependências do ESLint
+        run: npm audit --prefix src/farol/eslint --audit-level=high
 
   site:
     runs-on: ubuntu-latest

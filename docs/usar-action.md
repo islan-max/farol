@@ -41,7 +41,7 @@ Opções (`with:`):
 
 ## Linguagens
 
-Python (ruff). JavaScript e TypeScript chegam em seguida.
+Python (ruff) e JavaScript/TypeScript (ESLint com typescript-eslint: `.js`, `.jsx`, `.mjs`, `.cjs`, `.ts`, `.tsx`). O Node.js já vem nos runners do GitHub; o Farol instala o ESLint fixado uma vez por execução, sem rodar scripts de instalação. As regras são as do Farol; a configuração do ESLint do seu repositório é ignorada.
 
 ## Permissões e segurança
 
