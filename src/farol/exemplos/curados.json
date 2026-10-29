@@ -52,5 +52,14 @@
     "permalink": "https://github.com/django/django/blob/817df1c4d6d38f416460d7d9354d7deab9d35139/django/tasks/base.py#L62-L66",
     "trecho": "            func = import_string(func_path)\n            kwargs[\"func\"] = func.func\n        except (ImportError, AttributeError) as e:\n            msg = f\"Expected {func_path!r} to point to a Task instance.\"\n            raise ValueError(msg) from e",
     "porque": "O erro novo (ValueError) é levantado com from e, então o traceback aponta o ImportError ou AttributeError que o causou."
+  },
+  {
+    "id": "no-fallthrough-1",
+    "regra": "no-fallthrough",
+    "repo": "eslint/eslint",
+    "licenca": "MIT",
+    "permalink": "https://github.com/eslint/eslint/blob/6e3f9888cca518fbb9ba399e88b3033577d9f4ad/lib/rules/function-paren-newline.js#L267-L272",
+    "trecho": "\t\t\t\t\t\treturn null;\n\t\t\t\t\t}\n\n\t\t\t\t// falls through\n\n\t\t\t\tcase \"CallExpression\":",
+    "porque": "Aqui a queda para o próximo case é de propósito, e o comentário // falls through avisa isso a quem lê; o ESLint aceita esse comentário."
   }
 ]

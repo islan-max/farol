@@ -46,7 +46,7 @@ export function mensagem(nota) {
   return texto;
 }
 '''
-exemplos = []
+exemplos = ["no-fallthrough-1"]
 
 [[docs]]
 titulo = "Regra no-fallthrough no ESLint"
