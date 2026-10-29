@@ -296,7 +296,7 @@ jobs:
   farol:
     runs-on: ubuntu-latest
     steps:
-      - uses: islan-max/farol@main</code></pre>
+      - uses: islan-max/farol@v0</code></pre>
 <p>Não precisa de <code>actions/checkout</code>. O Farol comenta só nas linhas alteradas, uma vez por regra e por arquivo,
 com no máximo 10 comentários (opção <code>teto</code>). Sem apontamentos, ele não comenta.</p>
 <h3>Segurança e limites</h3>
