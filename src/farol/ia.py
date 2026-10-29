@@ -25,7 +25,7 @@ CONTEXTO_LINHAS = 2
 SISTEMA = (
     "Você é um mentor de programação. Responda sempre em português do Brasil, em no máximo duas "
     "frases curtas, sem markdown, sem listas e sem blocos de código. Baseie-se só nas informações "
-    "dadas e não invente problemas novos."
+    "dadas, não invente problemas novos e nunca contradiga a lição."
 )
 
 
@@ -42,7 +42,8 @@ def pedido(modelo: str, achado: Achado, lc: Licao, trecho: str) -> dict:
         f"A ferramenta apontou (linha {achado.line}): {achado.mensagem}\n\n"
         f"Trecho da pessoa:\n{trecho}\n\n"
         "Escreva 2 frases curtas dirigidas a quem escreveu este trecho: o que está errado "
-        "exatamente neste código (use os nomes do trecho) e qual mudança fazer."
+        "exatamente neste código (use os nomes do trecho) e qual mudança fazer. A mudança "
+        "recomendada deve ser a descrita em 'Como corrigir', sem propor outra."
     )
     return {
         "model": modelo,
