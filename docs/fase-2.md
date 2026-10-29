@@ -6,9 +6,9 @@ O MVP é o núcleo sem IA, a Action, a CLI e o site. Estes itens foram decididos
 
 Medida e implementada como **opcional, desligada por padrão**. O que foi medido, o que deu errado na primeira rodada e as decisões estão em [medicao-ia.md](medicao-ia.md).
 
-## Resumo entre PRs: ainda não feito
+## Resumo entre PRs: feito depois do MVP
 
-"O que você já domina e o que se repete." Precisa guardar histórico entre execuções sem servidor. Caminho mais barato: uma issue "Painel Farol" mantida pela Action, com a contagem de regras por pessoa em um comentário HTML.
+Implementado como a issue "Painel do Farol" (opcional, `painel: on`). Veja [usar-action.md](usar-action.md).
 
 ## Outras ideias
 
