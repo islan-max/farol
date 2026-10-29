@@ -14,6 +14,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ / "src"))
 
 from farol.comentarios import NIVEIS  # noqa: E402
+from farol.exemplos import da_licao  # noqa: E402
 from farol.licoes import Licao, todas  # noqa: E402
 
 SAIDA = RAIZ / "_site"
@@ -48,6 +49,14 @@ def bloco(codigo: str, rotulo: str) -> str:
     return f'<pre tabindex="0" aria-label="{esc(rotulo)}"><code>{esc(codigo)}</code></pre>'
 
 
+def exemplo_html(ex, titulo_tag: str) -> str:
+    return (
+        f'<div class="cartao exemplo-real"><{titulo_tag}>Como projetos reais resolvem</{titulo_tag}>'
+        f"<p>{md(ex.porque)}</p>{bloco(ex.trecho, 'Trecho de ' + ex.repo)}"
+        f'<p><a href="{esc(ex.permalink)}">{esc(ex.repo)}</a> · licença {esc(ex.licenca)}</p></div>'
+    )
+
+
 def licao_html(lc: Licao, titulo_tag: str = "h2") -> str:
     docs = " · ".join(f'<a href="{esc(d["url"])}">{esc(d["titulo"])}</a>' for d in lc.docs)
     return (
@@ -57,6 +66,7 @@ def licao_html(lc: Licao, titulo_tag: str = "h2") -> str:
         f"<{titulo_tag}>Por que importa</{titulo_tag}><p>{md(lc.por_que_importa)}</p>"
         f"<{titulo_tag}>Como corrigir</{titulo_tag}><p>{md(lc.como_corrigir)}</p>"
         f'{bloco(lc.antes, "Antes")}<p class="suave">Depois:</p>{bloco(lc.depois, "Depois")}'
+        + "".join(exemplo_html(ex, titulo_tag) for ex in da_licao(lc.exemplos))
         + (f"<p>Para ler mais: {docs}</p>" if docs else "")
     )
 

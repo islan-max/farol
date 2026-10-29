@@ -2,7 +2,7 @@
 
 Revisão de pull request que **ensina**. Quem está aprendendo abre um PR e recebe "LGTM" ou nada; o lint aponta o erro e não explica. O Farol comenta cada ponto dizendo **o que é**, **por que importa** e **como corrigir**, e mostra como projetos reais resolvem o mesmo caso.
 
-> Em construção. Já existem o núcleo para Python (12 lições), a CLI e a GitHub Action; JavaScript/TypeScript e o site chegam nos próximos PRs.
+> Em construção. Já existem o núcleo para Python (12 lições), a CLI, a GitHub Action e o [site](https://islan-max.github.io/farol/); JavaScript/TypeScript chega em seguida.
 
 ## Como vai funcionar
 
@@ -10,7 +10,7 @@ Revisão de pull request que **ensina**. Quem está aprendendo abre um PR e rece
 - **CLI**: `farol revisar` sobre um diff local.
 - **Site**: cole um trecho de Python e veja as lições, tudo no navegador.
 
-Não usa IA nem API paga. A análise vem de ferramentas abertas (ruff, eslint) e cada apontamento vira uma lição escrita à mão em português do Brasil.
+Não usa IA nem API paga. Cinco lições mostram **como projetos reais resolvem o mesmo caso** (Django, pytest), com trecho curto, link para o commit e licença; os exemplos são escolhidos e conferidos à mão. A análise vem de ferramentas abertas (ruff, eslint) e cada apontamento vira uma lição escrita à mão em português do Brasil.
 
 ## Usar a GitHub Action
 

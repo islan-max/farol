@@ -30,7 +30,7 @@ def conectar():
     password = os.environ["DB_PASSWORD"]
     return abrir_banco(usuario="admin", senha=password)
 '''
-exemplos = []
+exemplos = ["S105-1"]
 
 [[docs]]
 titulo = "Regra S105 no ruff"
