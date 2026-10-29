@@ -13,6 +13,8 @@ class Comentario:
     achado: Achado  # a primeira ocorrência da regra
     licao: Licao | None
     tambem: list[Achado] = field(default_factory=list)  # as outras ocorrências da mesma regra
+    nota: str | None = None  # frase da IA local (opcional), ligando a lição ao trecho
+    modelo: str = ""
 
 
 @dataclass

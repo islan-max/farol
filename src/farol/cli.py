@@ -10,6 +10,7 @@ from farol import __version__
 from farol.analise import FerramentaIndisponivel, analisar
 from farol.comentarios import corpo, corpo_licao, resumo_excedente
 from farol.diffs import build_input, split_git_diff
+from farol.ia import HOST_PADRAO, MODELO_PADRAO, Ollama, anotar
 from farol.licoes import todas
 from farol.revisao import TETO_INLINE, Revisao, montar
 
@@ -34,16 +35,17 @@ def git_diff(base: str | None) -> str:
 
 
 def revisar(
-    diff_texto: str, raiz: Path, teto: int = TETO_INLINE
+    diff_texto: str, raiz: Path, teto: int = TETO_INLINE, ia: Ollama | None = None
 ) -> tuple[Revisao, list[tuple[str, str]]]:
     entrada = build_input(split_git_diff(diff_texto))
-    achados, ignorados = [], list(entrada.skipped)
+    achados, ignorados, fontes = [], list(entrada.skipped), {}
     for arquivo in entrada.files:
         try:
             fonte = (raiz / arquivo.path).read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
             ignorados.append((arquivo.path, "não consegui ler o arquivo"))
             continue
+        fontes[arquivo.path] = fonte
         try:
             resultado = analisar(arquivo.path, fonte, arquivo.added)
         except FerramentaIndisponivel as erro:
@@ -53,7 +55,10 @@ def revisar(
             ignorados.append((arquivo.path, "linguagem ainda não suportada"))
         else:
             achados += resultado
-    return montar(achados, teto), ignorados
+    rev = montar(achados, teto)
+    if ia:
+        anotar(rev, fontes, ia)
+    return rev, ignorados
 
 
 def texto(rev: Revisao, ignorados: list[tuple[str, str]]) -> str:
@@ -92,6 +97,18 @@ def como_json(rev: Revisao, ignorados: list[tuple[str, str]]) -> str:
     return json.dumps(dados, ensure_ascii=False, indent=2)
 
 
+def _ia(args) -> Ollama | None:
+    cliente = Ollama(args.modelo, args.ollama)
+    if cliente.disponivel():
+        return cliente
+    print(
+        f"Aviso: o Ollama não respondeu em {args.ollama} com o modelo {args.modelo}; "
+        f"sigo sem IA. Para ativar: ollama serve e ollama pull {args.modelo}.",
+        file=sys.stderr,
+    )
+    return None
+
+
 def _explicar(codigo: str) -> int:
     achada = next((lc for (_, c), lc in todas().items() if c.lower() == codigo.lower()), None)
     if achada is None:
@@ -114,6 +131,9 @@ def main(argv: list[str] | None = None) -> int:
     rev.add_argument("--diff", help="lê um diff pronto de ARQUIVO (ou '-' para a entrada padrão)")
     rev.add_argument("--json", action="store_true", help="saída em JSON")
     rev.add_argument("--teto", type=int, default=TETO_INLINE, help="máximo de comentários")
+    rev.add_argument("--ia", action="store_true", help="nota extra de uma IA local (Ollama)")
+    rev.add_argument("--modelo", default=MODELO_PADRAO, help="modelo do Ollama para --ia")
+    rev.add_argument("--ollama", default=HOST_PADRAO, help="endereço do Ollama para --ia")
     exp = sub.add_parser("explicar", help="mostra a lição de uma regra, ex.: E722")
     exp.add_argument("codigo")
     args = parser.parse_args(argv)
@@ -128,7 +148,8 @@ def main(argv: list[str] | None = None) -> int:
                 entrada = Path(args.diff).read_text(encoding="utf-8")
             else:
                 entrada = git_diff(args.base)
-            resultado, ignorados = revisar(entrada, Path.cwd(), args.teto)
+            cliente = _ia(args) if args.ia else None
+            resultado, ignorados = revisar(entrada, Path.cwd(), args.teto, cliente)
         except (RuntimeError, OSError) as erro:
             print(f"Erro: {erro}", file=sys.stderr)
             return 2
