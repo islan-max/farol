@@ -1,0 +1,14 @@
+name: Farol como usuário externo (descartável)
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  farol:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: islan-max/farol@v0
