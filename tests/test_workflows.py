@@ -4,7 +4,7 @@ from pathlib import Path
 RAIZ = Path(__file__).parent.parent
 ARQUIVOS = [*sorted((RAIZ / ".github" / "workflows").glob("*.yml")), RAIZ / "action.yml"]
 USA = re.compile(r"^\s*-?\s*uses:\s*(\S+)", re.MULTILINE)
-SHA = re.compile(r"^[\w.-]+/[\w.-]+@[0-9a-f]{40}$")
+SHA = re.compile(r"^[\w.-]+/[\w.-]+(/[\w./-]+)?@[0-9a-f]{40}$")
 
 
 def test_actions_de_terceiros_estao_fixadas_por_sha():

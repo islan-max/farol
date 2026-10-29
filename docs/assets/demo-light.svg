@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="t d">
+<title id="t">Farol na linha de comando</title>
+<desc id="d">Um terminal onde o comando farol revisar --base main é digitado e mostra três apontamentos, cada um com o que é, por que importa e como corrigir.</desc>
+<style>
+  text { font: 400 15px ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; }
+  .barra { font: 500 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif; fill: #59636e; }
+  @keyframes l0 { 0%, 16.25% { opacity: 0; } 18.44%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l0 { animation: l0 16.0s infinite; } @keyframes l1 { 0%, 20.00% { opacity: 0; } 22.19%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l1 { animation: l1 16.0s infinite; } @keyframes l2 { 0%, 21.88% { opacity: 0; } 24.06%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l2 { animation: l2 16.0s infinite; } @keyframes l3 { 0%, 24.38% { opacity: 0; } 26.56%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l3 { animation: l3 16.0s infinite; } @keyframes l4 { 0%, 27.50% { opacity: 0; } 29.69%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l4 { animation: l4 16.0s infinite; } @keyframes l5 { 0%, 35.00% { opacity: 0; } 37.19%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l5 { animation: l5 16.0s infinite; } @keyframes l6 { 0%, 36.88% { opacity: 0; } 39.06%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l6 { animation: l6 16.0s infinite; } @keyframes l7 { 0%, 39.38% { opacity: 0; } 41.56%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l7 { animation: l7 16.0s infinite; } @keyframes l8 { 0%, 42.50% { opacity: 0; } 44.69%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l8 { animation: l8 16.0s infinite; } @keyframes l9 { 0%, 50.00% { opacity: 0; } 52.19%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l9 { animation: l9 16.0s infinite; } @keyframes l10 { 0%, 51.88% { opacity: 0; } 54.06%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l10 { animation: l10 16.0s infinite; } @keyframes l11 { 0%, 54.37% { opacity: 0; } 56.56%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l11 { animation: l11 16.0s infinite; } @keyframes l12 { 0%, 57.50% { opacity: 0; } 59.69%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l12 { animation: l12 16.0s infinite; } @keyframes l13 { 0%, 65.00% { opacity: 0; } 67.19%, 93% { opacity: 1; } 97%, 100% { opacity: 0; } } .l13 { animation: l13 16.0s infinite; } @keyframes digita { 0%, 3% { width: 0; } 15% { width: 243.0px; } 93% { width: 243.0px; } 97%, 100% { width: 0; } } #clip rect { animation: digita 16.0s steps(27, end) infinite; } @keyframes cursor { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } } .cursor { animation: cursor 1s steps(1) infinite; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } g[class^="l"] { opacity: 1; } #clip rect { width: 243.0px; } }
+</style>
+<defs><clipPath id="clip"><rect x="30" y="64" width="0" height="32"/></clipPath></defs>
+<rect x="0.5" y="0.5" width="959" height="539" rx="12" fill="#f6f8fa" stroke="#d0d7de"/>
+<path d="M0.5 40.5 H959.5" stroke="#d0d7de"/>
+<circle cx="24" cy="21" r="6" fill="#cf222e"/><circle cx="46" cy="21" r="6" fill="#9a6700"/><circle cx="68" cy="21" r="6" fill="#1a7f37"/>
+<text class="barra" x="480" y="26" text-anchor="middle" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif">~/meu-projeto · farol</text>
+<g clip-path="url(#clip)"><text x="30" y="86" fill="#1f2328"><tspan fill="#1a7f37">$</tspan> farol revisar --base main</text></g>
+<rect class="cursor" x="283.0" y="72" width="9" height="18" fill="#1f2328"/>
+<g class="l0"><text x="30" y="126" fill="#59636e" text-anchor="start">3 apontamentos nas linhas alteradas.</text></g>
+<g class="l1"><text x="30" y="166" fill="#59636e" text-anchor="start">── app.py:5</text></g>
+<g class="l2"><text x="30" y="192" fill="#cf222e" text-anchor="start">S105</text><text x="88" y="192" fill="#1f2328" text-anchor="start">Senha escrita direto no código</text><text x="930" y="192" fill="#59636e" text-anchor="end">iniciante</text></g>
+<g class="l3"><text x="88" y="214" fill="#59636e" text-anchor="start">Tudo que está no código vai para o Git, inclusive o histórico.</text></g>
+<g class="l4"><text x="88" y="236" fill="#1a7f37" text-anchor="start">✔ Leia de os.environ[&quot;DB_PASSWORD&quot;] e tire do repositório.</text></g>
+<g class="l5"><text x="30" y="276" fill="#59636e" text-anchor="start">── app.py:9</text></g>
+<g class="l6"><text x="30" y="302" fill="#9a6700" text-anchor="start">E722</text><text x="88" y="302" fill="#1f2328" text-anchor="start">`except:` sem tipo captura erro demais</text><text x="930" y="302" fill="#59636e" text-anchor="end">iniciante</text></g>
+<g class="l7"><text x="88" y="324" fill="#59636e" text-anchor="start">Captura até o Ctrl+C e esconde o problema de verdade.</text></g>
+<g class="l8"><text x="88" y="346" fill="#1a7f37" text-anchor="start">✔ Nomeie o erro que você espera tratar.</text></g>
+<g class="l9"><text x="30" y="386" fill="#59636e" text-anchor="start">── app.py:14</text></g>
+<g class="l10"><text x="30" y="412" fill="#0969da" text-anchor="start">B006</text><text x="88" y="412" fill="#1f2328" text-anchor="start">Valor padrão mutável em argumento de função</text><text x="930" y="412" fill="#59636e" text-anchor="end">intermediário</text></g>
+<g class="l11"><text x="88" y="434" fill="#59636e" text-anchor="start">A lista é criada uma única vez e compartilhada entre chamadas.</text></g>
+<g class="l12"><text x="88" y="456" fill="#1a7f37" text-anchor="start">✔ Use None como padrão e crie a lista dentro da função.</text></g>
+<g class="l13"><text x="30" y="498" fill="#59636e" text-anchor="start">Uma lição por regra, só nas linhas que você alterou.</text></g>
+</svg>

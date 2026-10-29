@@ -1,0 +1,19 @@
+changelog:
+  exclude:
+    labels:
+      - ignorar
+    authors:
+      - dependabot
+  categories:
+    - title: "Lições e exemplos"
+      labels: ["lição", "exemplo real"]
+    - title: "Correções"
+      labels: ["bug"]
+    - title: "Novidades"
+      labels: ["enhancement", "ia-local", "painel"]
+    - title: "Acessibilidade e site"
+      labels: ["acessibilidade"]
+    - title: "Documentação"
+      labels: ["documentation"]
+    - title: "Outras mudanças"
+      labels: ["*"]
