@@ -1,0 +1,44 @@
+codigo = "E722"
+ferramenta = "ruff"
+titulo = "`except:` sem tipo captura erro demais"
+nivel = "iniciante"
+o_que_e = """
+Um `except:` sem nome de exceção captura **qualquer** erro, inclusive os que você nunca quis tratar, \
+como o Ctrl+C (`KeyboardInterrupt`) e o `SystemExit`.
+"""
+por_que_importa = """
+Quando algo dá errado por um motivo inesperado (um erro de digitação, um arquivo que sumiu), o programa \
+segue em silêncio e você perde a pista do problema. Ele também deixa de parar com Ctrl+C. \
+Isso é comum no começo: o `except:` parece o jeito mais seguro de "não deixar quebrar", mas esconde \
+o problema em vez de resolvê-lo.
+"""
+como_corrigir = """
+Nomeie o erro que você espera tratar. Se não sabe qual é, rode uma vez sem o `try` e leia o nome do erro \
+no traceback. Se precisa mesmo de uma rede de segurança geral, use `except Exception:`, que deixa o \
+Ctrl+C passar, e registre o erro em vez de ignorá-lo.
+"""
+antes = '''
+def ler_idade(texto):
+    try:
+        idade = int(texto)
+    except:
+        idade = 0
+    return idade
+'''
+depois = '''
+def ler_idade(texto):
+    try:
+        idade = int(texto)
+    except ValueError:
+        idade = 0
+    return idade
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra E722 no ruff"
+url = "https://docs.astral.sh/ruff/rules/bare-except/"
+
+[[docs]]
+titulo = "Tutorial do Python: tratando exceções"
+url = "https://docs.python.org/pt-br/3/tutorial/errors.html#handling-exceptions"

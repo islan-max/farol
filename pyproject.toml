@@ -21,6 +21,7 @@ packages = ["src/farol"]
 
 [tool.ruff]
 line-length = 100
+extend-exclude = ["evals/casos"]  # código ruim de propósito
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP", "S"]

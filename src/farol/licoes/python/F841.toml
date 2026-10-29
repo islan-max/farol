@@ -1,0 +1,30 @@
+codigo = "F841"
+ferramenta = "ruff"
+titulo = "Variável criada e nunca usada"
+nivel = "iniciante"
+o_que_e = """
+Você guarda um valor em uma variável dentro de uma função, mas nenhuma linha lê essa variável depois.
+"""
+por_que_importa = """
+Quase sempre é um sinal: ou sobrou código de uma ideia antiga, ou você esqueceu de usar o resultado, o que é \
+um bug de verdade (como calcular o total com o frete e devolver o total sem o frete). Mesmo quando é \
+inofensivo, faz quem lê procurar para que a variável serve.
+"""
+como_corrigir = """
+Se o valor é necessário, use-o: devolva, imprima, compare. Se só importa o efeito da chamada, não guarde \
+o resultado. Se você desempacota vários valores e não quer um deles, nomeie esse como `_`.
+"""
+antes = '''
+def total_com_frete(precos, frete):
+    total = sum(precos) + frete
+    return sum(precos)
+'''
+depois = '''
+def total_com_frete(precos, frete):
+    return sum(precos) + frete
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra F841 no ruff"
+url = "https://docs.astral.sh/ruff/rules/unused-variable/"

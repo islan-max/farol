@@ -1,0 +1,37 @@
+codigo = "B006"
+ferramenta = "ruff"
+titulo = "Valor padrão mutável em argumento de função"
+nivel = "intermediario"
+o_que_e = """
+Listas, dicionários e conjuntos usados como valor padrão (`def f(itens=[])`) são criados **uma única vez**, \
+quando a função é definida, e não a cada chamada.
+"""
+por_que_importa = """
+Todas as chamadas que usam o padrão compartilham o mesmo objeto. Se a função altera a lista, a alteração \
+aparece nas chamadas seguintes, e o bug parece aleatório: depende de quantas vezes a função já rodou. \
+Quase todo mundo cai nessa uma vez; o Python se comporta assim de propósito, mas surpreende.
+"""
+como_corrigir = """
+Use `None` como padrão e crie o objeto novo dentro da função.
+"""
+antes = '''
+def adicionar(item, itens=[]):
+    itens.append(item)
+    return itens
+'''
+depois = '''
+def adicionar(item, itens=None):
+    if itens is None:
+        itens = []
+    itens.append(item)
+    return itens
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra B006 no ruff"
+url = "https://docs.astral.sh/ruff/rules/mutable-argument-default/"
+
+[[docs]]
+titulo = "Tutorial do Python: valores padrão de argumentos"
+url = "https://docs.python.org/pt-br/3/tutorial/controlflow.html#default-argument-values"

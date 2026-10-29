@@ -1,0 +1,37 @@
+codigo = "E712"
+ferramenta = "ruff"
+titulo = "Não compare com `True` ou `False`"
+nivel = "iniciante"
+o_que_e = """
+`if ativo == True:` compara o valor com `True`, mas a condição do `if` já espera um valor verdadeiro ou falso.
+"""
+por_que_importa = """
+Fica mais longo sem ficar mais claro, e pode se comportar diferente do que você imagina: o número `2` conta \
+como verdadeiro dentro de um `if`, mas `2 == True` é falso. Quando a comparação com `True` é desnecessária, \
+ela só dá mais um lugar para o bug se esconder.
+"""
+como_corrigir = """
+Use o valor direto: `if ativo:` e `if not ativo:`. Se você precisa mesmo distinguir `False` de `None`, \
+use `is False` ou `is None` e deixe o motivo num comentário.
+"""
+antes = '''
+def pode_entrar(usuario):
+    if usuario.ativo == True:
+        return "sim"
+    return "não"
+'''
+depois = '''
+def pode_entrar(usuario):
+    if usuario.ativo:
+        return "sim"
+    return "não"
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra E712 no ruff"
+url = "https://docs.astral.sh/ruff/rules/true-false-comparison/"
+
+[[docs]]
+titulo = "PEP 8: recomendações de programação"
+url = "https://peps.python.org/pep-0008/#programming-recommendations"

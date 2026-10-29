@@ -1,0 +1,32 @@
+codigo = "F401"
+ferramenta = "ruff"
+titulo = "Import que não é usado"
+nivel = "iniciante"
+o_que_e = """
+O módulo foi importado, mas nenhuma linha do arquivo usa esse nome.
+"""
+por_que_importa = """
+Imports sobrando confundem quem lê ("onde isso é usado?"), atrasam um pouco a carga do programa e, com o \
+tempo, escondem dependências que já não existem. Muitas vezes são sobra de uma ideia que você mudou, e isso \
+é normal; o importante é limpar antes de revisar.
+"""
+como_corrigir = """
+Apague a linha do import. Se o import existe de propósito, por exemplo para reexportar um nome em um \
+`__init__.py`, liste o nome em `__all__` ou explique com `# noqa: F401` e o motivo.
+"""
+antes = '''
+import os
+import sys
+
+print(sys.argv)
+'''
+depois = '''
+import sys
+
+print(sys.argv)
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra F401 no ruff"
+url = "https://docs.astral.sh/ruff/rules/unused-import/"
