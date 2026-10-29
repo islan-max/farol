@@ -112,6 +112,14 @@ uvx --from git+https://github.com/islan-max/farol farol revisar --base main # tu
 uvx --from git+https://github.com/islan-max/farol farol explicar E722       # uma lição, sem diff
 ```
 
+### 🐳 Container
+
+Sem `uv` e sem Node.js na máquina: a imagem já traz tudo (Python, Node.js e o ESLint fixado) e roda sem privilégios.
+
+```bash
+docker run --rm -v "$PWD:/repo" ghcr.io/islan-max/farol revisar --base main
+```
+
 ### 🌐 No navegador
 
 > [!TIP]

@@ -34,6 +34,17 @@ Ou instale uma vez: `uv tool install git+https://github.com/islan-max/farol` e u
 
 Na primeira vez o Farol instala o ESLint fixado (cerca de 100 pacotes, com `npm ci --ignore-scripts`) em `~/.cache/farol`. Sem Node.js, os arquivos `.js`/`.ts` aparecem em "Não revisados" dizendo que falta o Node.
 
+## Imagem de container
+
+Sem `uv` nem Node.js, use a imagem publicada no GitHub Packages. Ela traz Python, Node.js, `git` e o ESLint já instalado (fixado, sem baixar a cada execução) e roda como usuário sem privilégios (uid 10001).
+
+```bash
+docker run --rm -v "$PWD:/repo" ghcr.io/islan-max/farol revisar --base main
+docker run --rm ghcr.io/islan-max/farol explicar E722
+```
+
+Tags: `0.1.1` (versão exata), `0.1`, `v0` (mais nova 0.x) e `latest`. Para travar uma versão, use a exata. O diretório montado em `/repo` precisa ser um repositório git; a imagem só **lê** os arquivos. Receita em [`Dockerfile`](../Dockerfile); a CI constrói a imagem e roda um teste de fumaça (Python e JavaScript) antes de publicar.
+
 ## Erros comuns
 
 - `Erro: fatal: not a git repository`: rode dentro de um repositório git ou use `--diff`.
