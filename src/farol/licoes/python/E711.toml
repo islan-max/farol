@@ -27,7 +27,7 @@ def tem_nome(pessoa):
         return False
     return True
 '''
-exemplos = []
+exemplos = ["E711-1"]
 
 [[docs]]
 titulo = "Regra E711 no ruff"

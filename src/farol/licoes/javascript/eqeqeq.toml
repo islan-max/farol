@@ -25,7 +25,7 @@ function ehAdulto(idade) {
   return Number(idade) === 18;
 }
 '''
-exemplos = []
+exemplos = ["eqeqeq-1"]
 
 [[docs]]
 titulo = "Regra eqeqeq no ESLint"

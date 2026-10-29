@@ -27,7 +27,7 @@ export function area(raio) {
   return pi * raio * raio;
 }
 '''
-exemplos = []
+exemplos = ["prefer-const-1"]
 
 [[docs]]
 titulo = "Regra prefer-const no ESLint"

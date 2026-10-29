@@ -70,5 +70,113 @@
     "permalink": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/docs/user/advanced.rst#L1106-L1113",
     "trecho": "If you specify a single value for the timeout, like this::\n\n    r = requests.get('https://github.com', timeout=5)\n\nThe timeout value will be applied to both the ``connect`` and the ``read``\ntimeouts. Specify a tuple if you would like to set the values separately::\n\n    r = requests.get('https://github.com', timeout=(3.05, 27))",
     "porque": "A documentação oficial do requests mostra timeout=5 para o limite único e timeout=(3.05, 27) para separar conexão e leitura, exatamente o que a lição ensina."
+  },
+  {
+    "id": "E711-1",
+    "regra": "E711",
+    "repo": "pallets/flask",
+    "licenca": "BSD-3-Clause",
+    "permalink": "https://github.com/pallets/flask/blob/d086db856be187255b8ec61ef409357393020f32/src/flask/app.py#L806-L808",
+    "trecho": "        cls = self.test_client_class\n        if cls is None:\n            from .testing import FlaskClient as cls",
+    "porque": "Pergunta se cls é o próprio None com is None, e só então usa o valor padrão."
+  },
+  {
+    "id": "E713-1",
+    "regra": "E713",
+    "repo": "psf/requests",
+    "licenca": "Apache-2.0",
+    "permalink": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/cookies.py#L304-L308",
+    "trecho": "        domains: list[str] = []\n        for cookie in iter(self):\n            if cookie.domain not in domains:\n                domains.append(cookie.domain)\n        return domains",
+    "porque": "Usa not in para saber se o domínio ainda não está na lista, lendo como uma frase."
+  },
+  {
+    "id": "E731-1",
+    "regra": "E731",
+    "repo": "pallets/click",
+    "licenca": "BSD-3-Clause",
+    "permalink": "https://github.com/pallets/click/blob/2247b35ea1c47c727d7a06e51fa280e12a863ff6/src/click/core.py#L2580-L2583",
+    "trecho": "        if not self.opts:\n            return self.name\n\n        return max(self.opts, key=lambda opt: len(_split_opt(opt)[0]))",
+    "porque": "A lambda é passada direto como key=, que é onde ela vale a pena; sem nome, não há o que trocar por def."
+  },
+  {
+    "id": "F401-1",
+    "regra": "F401",
+    "repo": "psf/requests",
+    "licenca": "Apache-2.0",
+    "permalink": "https://github.com/psf/requests/blob/3c7baaa05ab4aa49cc819ce3a819d260de19c157/src/requests/models.py#L12-L15",
+    "trecho": "# Import encoding now, to avoid implicit import later.\n# Implicit import within threads may cause LookupError when standard library is in a ZIP,\n# such as in Embedded Python. See https://github.com/psf/requests/issues/3578.\nimport encodings.idna  # noqa: F401",
+    "porque": "O import é de propósito: os comentários explicam o motivo e o # noqa: F401 avisa a ferramenta."
+  },
+  {
+    "id": "F841-1",
+    "regra": "F841",
+    "repo": "pallets/click",
+    "licenca": "BSD-3-Clause",
+    "permalink": "https://github.com/pallets/click/blob/2247b35ea1c47c727d7a06e51fa280e12a863ff6/src/click/shell_completion.py#L774-L776",
+    "trecho": "    elif \"=\" in incomplete and _start_of_option(ctx, incomplete):\n        name, _, incomplete = incomplete.partition(\"=\")\n        args.append(name)",
+    "porque": "Ao desempacotar, a parte do meio que não interessa se chama _, deixando claro que é de propósito."
+  },
+  {
+    "id": "B007-1",
+    "regra": "B007",
+    "repo": "pallets/click",
+    "licenca": "BSD-3-Clause",
+    "permalink": "https://github.com/pallets/click/blob/2247b35ea1c47c727d7a06e51fa280e12a863ff6/src/click/parser.py#L85-L86",
+    "trecho": "        elif nargs > 1:\n            x: list[str | T_UNSET] = [_fetch(args) for _ in range(nargs)]",
+    "porque": "Repete nargs vezes sem usar o contador, e o nome _ avisa isso a quem lê."
+  },
+  {
+    "id": "no-explicit-any-1",
+    "regra": "no-explicit-any",
+    "repo": "sindresorhus/is",
+    "licenca": "MIT",
+    "permalink": "https://github.com/sindresorhus/is/blob/e9c026c611c1160eaad50da00be4e676b626018f/source/index.ts#L65-L67",
+    "trecho": "function isTypedArrayName(name: unknown): name is TypedArrayTypeName {\n\treturn typedArrayTypeNames.includes(name as TypedArrayTypeName);\n}",
+    "porque": "O parâmetro é unknown em vez de any: o TypeScript obriga a conferir o tipo antes de usar o valor."
+  },
+  {
+    "id": "eqeqeq-1",
+    "regra": "eqeqeq",
+    "repo": "sindresorhus/is",
+    "licenca": "MIT",
+    "permalink": "https://github.com/sindresorhus/is/blob/e9c026c611c1160eaad50da00be4e676b626018f/source/index.ts#L485-L487",
+    "trecho": "export function isArrayBuffer(value: unknown): value is ArrayBuffer {\n\treturn getObjectType(value) === 'ArrayBuffer';\n}",
+    "porque": "Compara com === (valor e tipo, sem conversão), como na maioria das verificações desse projeto."
+  },
+  {
+    "id": "no-empty-1",
+    "regra": "no-empty",
+    "repo": "sindresorhus/is",
+    "licenca": "MIT",
+    "permalink": "https://github.com/sindresorhus/is/blob/e9c026c611c1160eaad50da00be4e676b626018f/source/index.ts#L265-L274",
+    "trecho": "function hasBoxedPrimitiveBrand(value: unknown, valueOf: () => unknown): boolean {\n\ttry {\n\t\t// `Object.prototype.toString` can be spoofed via `Symbol.toStringTag`, but the\n\t\t// boxed primitive `valueOf` methods still enforce the real internal brand.\n\t\tReflect.apply(valueOf, value, []);\n\t\treturn true;\n\t} catch {\n\t\treturn false;\n\t}\n}",
+    "porque": "O catch não é vazio: trata o erro devolvendo false, e os comentários dizem por que a chamada pode falhar."
+  },
+  {
+    "id": "no-unused-vars-1",
+    "regra": "no-unused-vars",
+    "repo": "expressjs/express",
+    "licenca": "MIT",
+    "permalink": "https://github.com/expressjs/express/blob/1c6f1b0fe4000977b9a7b4f34097e4d527dd9824/test/res.send.js#L608-L610",
+    "trecho": "        app.use(function(_, res){\n          res.status(200).set('Transfer-Encoding', encoding).send('');\n        });",
+    "porque": "O parâmetro que não será usado se chama _, e o segundo, res, é o que importa."
+  },
+  {
+    "id": "prefer-const-1",
+    "regra": "prefer-const",
+    "repo": "sindresorhus/is",
+    "licenca": "MIT",
+    "permalink": "https://github.com/sindresorhus/is/blob/e9c026c611c1160eaad50da00be4e676b626018f/source/index.ts#L181-L182",
+    "trecho": "const getObjectType = (value: unknown): ObjectTypeName | undefined => {\n\tconst objectTypeName = Object.prototype.toString.call(value).slice(8, -1);",
+    "porque": "Nenhum dos dois valores é reatribuído, então os dois são const."
+  },
+  {
+    "id": "no-var-1",
+    "regra": "no-var",
+    "repo": "sindresorhus/is",
+    "licenca": "MIT",
+    "permalink": "https://github.com/sindresorhus/is/blob/e9c026c611c1160eaad50da00be4e676b626018f/source/index.ts#L181-L182",
+    "trecho": "const getObjectType = (value: unknown): ObjectTypeName | undefined => {\n\tconst objectTypeName = Object.prototype.toString.call(value).slice(8, -1);",
+    "porque": "Declara tudo com const (e let só quando o valor muda); não há var."
   }
 ]

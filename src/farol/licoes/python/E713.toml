@@ -25,7 +25,7 @@ def registrar(item, vistos):
     if item not in vistos:
         vistos.append(item)
 '''
-exemplos = []
+exemplos = ["E713-1"]
 
 [[docs]]
 titulo = "Regra E713 no ruff"

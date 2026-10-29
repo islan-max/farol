@@ -41,6 +41,8 @@ uv run python scripts/buscar_exemplos.py adicionar --regra B006 --repo dono/proj
 uv run python scripts/buscar_exemplos.py conferir                 # relê todos no GitHub
 ```
 
+Nem toda lição precisa de exemplo: quando o jeito certo é apenas **não cometer o erro** (chave repetida, código depois do `return`, `f` sem campo), um trecho de projeto real não ensina nada, e a lição sai sem a seção. Na hora de escolher, procure o jeito certo em uso de verdade, e não o erro; documentação oficial também vale (o exemplo de `S113` vem da documentação do requests).
+
 Leia o arquivo candidato e escolha você mesmo: a busca acha arquivos que contêm as palavras, não bons exemplos. O trecho tem até 12 linhas, vem de um commit fixo (permalink) e de um projeto com licença permissiva (MIT, Apache-2.0, BSD, ISC, PSF, Unlicense). Se não achar um exemplo bom, deixe `exemplos = []`: a lição sai sem a seção.
 
 ## Regra nova

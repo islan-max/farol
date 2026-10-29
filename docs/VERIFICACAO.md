@@ -69,8 +69,8 @@ Observação: ferramentas automáticas cobrem só parte dos problemas de acessib
 
 | ID | Teste | Observado | Estado |
 | --- | --- | --- | --- |
-| L-01 | Em cada lição o `antes` dispara a regra e o `depois` não (ruff e ESLint; em `.js` e `.ts`) | 27 lições passam (17 de Python, 10 de JS/TS) | APROVADO |
-| L-02 | Exemplos reais relidos no commit do permalink, com licença permissiva | 7 de 7 batem (`scripts/buscar_exemplos.py conferir`) | APROVADO |
+| L-01 | Em cada lição o `antes` dispara a regra e o `depois` não (ruff e ESLint; em `.js` e `.ts`) | 29 lições passam (18 de Python, 11 de JS/TS) | APROVADO |
+| L-02 | Exemplos reais relidos no commit do permalink, com licença permissiva | 20 de 20 batem (`scripts/buscar_exemplos.py conferir`; 20 das 29 lições têm exemplo) | APROVADO |
 | L-03 | Falso positivo no conjunto de avaliação (`evals/casos`) e em código real | 0 nos 7 casos limpos (18 casos). Em requests, flask, click, express e sindresorhus/is a medição achou 4 problemas reais, **corrigidos** ([avaliacao-em-codigo-real.md](avaliacao-em-codigo-real.md)); sobraram falsos positivos conhecidos para projetos estabelecidos (`F401` em módulos de compatibilidade, `== null`). Poucos projetos e amostra de 3 achados por regra | APROVADO (com limites registrados) |
 | L-04 | Links de documentação | Todos os links das lições respondem 200 (conferido em 29/10, em duas rodadas) | APROVADO |
 

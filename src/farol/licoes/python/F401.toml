@@ -25,7 +25,7 @@ import sys
 
 print(sys.argv)
 '''
-exemplos = []
+exemplos = ["F401-1"]
 
 [[docs]]
 titulo = "Regra F401 no ruff"

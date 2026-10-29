@@ -28,7 +28,7 @@ export function total(precos) {
   return precos.reduce((a, b) => a + b, 0);
 }
 '''
-exemplos = []
+exemplos = ["no-unused-vars-1"]
 
 [[docs]]
 titulo = "Regra no-unused-vars no ESLint"

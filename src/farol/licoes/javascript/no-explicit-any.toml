@@ -26,7 +26,7 @@ export function dobro(valor: number) {
   return valor * 2;
 }
 '''
-exemplos = []
+exemplos = ["no-explicit-any-1"]
 
 [[docs]]
 titulo = "Regra no-explicit-any no typescript-eslint"

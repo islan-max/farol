@@ -35,7 +35,7 @@ function lerConfig(texto) {
   }
 }
 '''
-exemplos = []
+exemplos = ["no-empty-1"]
 
 [[docs]]
 titulo = "Regra no-empty no ESLint"
