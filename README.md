@@ -14,7 +14,7 @@
   <a href="LICENSE"><img alt="Licença MIT" src="https://img.shields.io/badge/licen%C3%A7a-MIT-3fb950?style=flat-square"></a>
 </p>
 <p>
-  <img alt="27 lições" src="https://img.shields.io/badge/li%C3%A7%C3%B5es-27-e3b341?style=flat-square">
+  <img alt="28 lições" src="https://img.shields.io/badge/li%C3%A7%C3%B5es-28-e3b341?style=flat-square">
   <img alt="IA opcional" src="https://img.shields.io/badge/IA-opcional-8957e5?style=flat-square">
   <img alt="WCAG 2.2 AA" src="https://img.shields.io/badge/WCAG_2.2-AA-1a7f37?style=flat-square">
   <img alt="Python 3.12" src="https://img.shields.io/badge/python-3.12-3572a5?style=flat-square&logo=python&logoColor=white">
@@ -141,11 +141,12 @@ As lições são o produto. Em cada uma, o exemplo **"antes" dispara a regra na 
 
 <!-- licoes:inicio -->
 <details>
-<summary><b>Python</b> · 17 lições (ruff)</summary>
+<summary><b>Python</b> · 18 lições (ruff)</summary>
 
 | Regra | Lição | Nível | Exemplo real |
 | --- | --- | --- | :---: |
 | [`B006`](https://islan-max.github.io/farol/licoes/B006.html) | Valor padrão mutável em argumento de função | intermediário | ✔ |
+| [`B007`](https://islan-max.github.io/farol/licoes/B007.html) | Variável de laço que nunca é usada | iniciante |  |
 | [`B904`](https://islan-max.github.io/farol/licoes/B904.html) | Ao levantar outro erro dentro de `except`, use `raise ... from` | intermediário | ✔ |
 | [`E711`](https://islan-max.github.io/farol/licoes/E711.html) | Compare com `None` usando `is` | iniciante |  |
 | [`E712`](https://islan-max.github.io/farol/licoes/E712.html) | Não compare com `True` ou `False` | iniciante |  |
