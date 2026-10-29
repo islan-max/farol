@@ -38,6 +38,7 @@ class Licao:
     docs: tuple[dict, ...]
     exemplos: tuple[str, ...]  # ids em exemplos/curados.json
     linguagem: str = "python"  # linguagem dos trechos antes/depois (para o bloco de código)
+    categoria: str = ""  # "seguranca" passa na frente quando o teto de comentários aperta
 
 
 def _ler(arquivo: Path) -> Licao:
@@ -55,6 +56,7 @@ def _ler(arquivo: Path) -> Licao:
         docs=tuple(dados.get("docs", [])),
         exemplos=tuple(dados.get("exemplos", [])),
         linguagem=dados.get("linguagem", "python"),
+        categoria=dados.get("categoria", ""),
     )
 
 

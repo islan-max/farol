@@ -28,9 +28,9 @@ def _chave(a: Achado) -> tuple:
 
 
 def _prioridade(c: Comentario) -> tuple:
-    # Segurança (S...) primeiro; depois a ordem natural do arquivo.
+    # Lições de segurança primeiro; depois a ordem natural do arquivo.
     a = c.achado
-    return (0 if (a.codigo or "").startswith("S") else 1, a.path, a.line)
+    return (0 if c.licao and c.licao.categoria == "seguranca" else 1, a.path, a.line)
 
 
 def montar(achados: list[Achado], teto: int = TETO_INLINE) -> Revisao:

@@ -1,6 +1,7 @@
 codigo = "S105"
 ferramenta = "ruff"
 titulo = "Senha escrita direto no código"
+categoria = "seguranca"
 nivel = "iniciante"
 o_que_e = """
 Uma variável com nome de senha, token ou chave recebe um texto fixo no código, como \
