@@ -1,10 +1,10 @@
 codigo = "no-unused-vars"
 ferramenta = "eslint"
 linguagem = "javascript"
-titulo = "Variável ou parâmetro que nunca é usado"
+titulo = "Variável ou import que nunca é usado"
 nivel = "iniciante"
 o_que_e = """
-Você declara uma variável, um parâmetro ou um import, mas nenhuma linha lê esse nome depois.
+Você declara uma variável ou um import, mas nenhuma linha lê esse nome depois.
 """
 por_que_importa = """
 Quase sempre é um sinal: ou sobrou código de uma ideia antiga, ou você esqueceu de usar o resultado, o que é \
@@ -12,12 +12,12 @@ um bug de verdade (calcular o total com o frete e devolver o total sem o frete).
 faz quem lê procurar para que aquilo serve.
 """
 como_corrigir = """
-Se o valor é necessário, use-o. Se não é, apague a variável ou o parâmetro. Para um parâmetro que a \
-assinatura exige mas você não usa, o costume é nomeá-lo com `_` na frente (`_frete`) e configurar a \
-ferramenta para aceitar esse padrão.
+Se o valor é necessário, use-o. Se não é, apague a variável. Quando você precisa declarar e não usar, por \
+exemplo ao desestruturar (`const [_primeiro, segundo] = lista`), comece o nome com `_`: o Farol entende que é \
+de propósito. Parâmetros de função que você não usa não são apontados.
 """
 antes = '''
-export function total(precos, frete) {
+export function total(precos) {
   const soma = precos.reduce((a, b) => a + b, 0);
   const media = soma / precos.length;
   return soma;

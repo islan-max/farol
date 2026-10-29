@@ -8,6 +8,11 @@ from farol.achados import Achado
 from farol.licoes import codigos
 
 TIMEOUT_S = 30
+# Senha de mentira, `except: pass` e chamada sem timeout são normais em teste: não aponta lá.
+EM_TESTES = ["S105", "S110", "S113", "S608"]
+PADROES_DE_TESTE = ["**/tests/**", "**/test/**", "**/test_*.py", "**/*_test.py", "**/conftest.py"]
+_ITENS = ", ".join(f'"{padrao}" = {json.dumps(EM_TESTES)}' for padrao in PADROES_DE_TESTE)
+IGNORAR_EM_TESTES = f"lint.per-file-ignores = {{{_ITENS}}}"
 
 
 def analisar(path: str, source: str, linhas: set[int] | None = None) -> list[Achado]:
@@ -19,6 +24,8 @@ def analisar(path: str, source: str, linhas: set[int] | None = None) -> list[Ach
         "ruff",
         "check",
         "--isolated",  # ignora a configuração do repositório revisado: o Farol decide as regras
+        "--config",
+        IGNORAR_EM_TESTES,
         "--select",
         select,
         "--output-format",
