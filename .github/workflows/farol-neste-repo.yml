@@ -1,0 +1,16 @@
+name: Farol neste repositório
+
+# O Farol revisa os próprios PRs. Usa `pull_request` (nunca `pull_request_target`).
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  farol:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./
