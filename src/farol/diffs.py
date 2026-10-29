@@ -90,3 +90,28 @@ def build_input(pr_files: list[dict], *, max_files: int = MAX_FILES) -> ReviewIn
         else:
             files.append(parse_patch(path, item["patch"]))
     return ReviewInput(files, skipped)
+
+
+def split_git_diff(text: str) -> list[dict]:
+    """Divide a saída de `git diff` em itens no formato de `build_input`.
+
+    shortcut: caminhos que o git coloca entre aspas (acentos, espaços) não são decodificados,
+    então esses arquivos ficam de fora; upgrade: tratar aspas quando alguém reclamar.
+    """
+    itens: list[dict] = []
+    atual: dict | None = None
+    for linha in text.replace("\r\n", "\n").split("\n"):
+        if linha.startswith("diff --git "):
+            atual = {"filename": None, "status": "modified", "patch": ""}
+            itens.append(atual)
+        elif atual is None:
+            continue
+        elif linha.startswith("+++ ") and not atual["patch"]:
+            alvo = linha[4:]
+            if alvo == "/dev/null":
+                atual["status"] = "removed"
+            elif alvo.startswith("b/"):
+                atual["filename"] = alvo[2:]
+        elif linha.startswith("@@ ") or atual["patch"]:
+            atual["patch"] += linha + "\n"
+    return [i for i in itens if i["filename"]]
