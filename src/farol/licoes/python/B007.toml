@@ -1,0 +1,36 @@
+codigo = "B007"
+ferramenta = "ruff"
+titulo = "Variável de laço que nunca é usada"
+nivel = "iniciante"
+o_que_e = """
+O `for` cria uma variável a cada volta (`for i in range(3)`), mas nada dentro do laço usa essa variável.
+"""
+por_que_importa = """
+Quem lê procura onde o `i` é usado e não acha, e fica na dúvida se faltou usá-lo (um bug de verdade, \
+como indexar a lista errada) ou se é só para repetir. Dar um nome a algo que não será usado também \
+esconde essa intenção.
+"""
+como_corrigir = """
+Se o laço só repete, nomeie a variável `_`: é o jeito de dizer "não vou usar isto". Em um laço que \
+desempacota (`for chave, valor in itens`) e só usa a chave, escreva `for chave, _ in itens`, ou itere \
+só pelas chaves. Se você esqueceu de usar a variável, use-a.
+"""
+antes = '''
+def repetir():
+    for i in range(3):
+        print("oi")
+'''
+depois = '''
+def repetir():
+    for _ in range(3):
+        print("oi")
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra B007 no ruff"
+url = "https://docs.astral.sh/ruff/rules/unused-loop-control-variable/"
+
+[[docs]]
+titulo = "Tutorial do Python: instrução for"
+url = "https://docs.python.org/pt-br/3/tutorial/controlflow.html#for-statements"

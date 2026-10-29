@@ -4,6 +4,7 @@ Uso: python scripts/atualizar_readme.py          (reescreve o trecho entre os ma
      python scripts/atualizar_readme.py --conferir   (sai com erro se o README estiver defasado)
 """
 
+import re
 import sys
 from pathlib import Path
 
@@ -58,6 +59,9 @@ def main() -> int:
     texto = readme.read_text(encoding="utf-8")
     i, j = texto.index(INICIO), texto.index(FIM) + len(FIM)
     novo = texto[:i] + bloco() + texto[j:]
+    total = len(todas())
+    novo = re.sub(r"(li%C3%A7%C3%B5es-)\d+(-)", rf"\g<1>{total}\g<2>", novo)
+    novo = re.sub(r'alt="\d+ lições"', f'alt="{total} lições"', novo)
     if "--conferir" in sys.argv:
         if novo != texto:
             print("README defasado: rode python scripts/atualizar_readme.py", file=sys.stderr)
