@@ -165,3 +165,53 @@ describe("teclado", () => {
     await ctx.close();
   });
 });
+
+describe("conteúdo, links e privacidade", () => {
+  test("toda página tem idioma, título único, descrição, canonical e um só h1", async () => {
+    const titulos = new Set();
+    for (const pagina of paginas()) {
+      const { ctx, p } = await abrir(pagina, "dark");
+      const d = await p.evaluate(() => ({
+        lang: document.documentElement.lang,
+        titulo: document.title,
+        descricao: document.querySelector('meta[name="description"]')?.content ?? "",
+        canonical: document.querySelector('link[rel="canonical"]')?.href ?? "",
+        h1: document.querySelectorAll("h1").length,
+      }));
+      await ctx.close();
+      assert.equal(d.lang, "pt-BR", pagina);
+      assert.ok(d.titulo.length > 5 && !titulos.has(d.titulo), `${pagina}: título vazio ou repetido`);
+      titulos.add(d.titulo);
+      assert.ok(d.descricao.length >= 30, `${pagina}: descrição curta`);
+      assert.ok(d.canonical.startsWith("https://islan-max.github.io/farol/"), `${pagina}: canonical`);
+      assert.equal(d.h1, 1, `${pagina}: precisa de exatamente um h1`);
+    }
+  });
+
+  test("todo link interno aponta para uma página ou arquivo que existe", async () => {
+    for (const pagina of paginas().filter((p) => p !== "404.html")) {
+      const { ctx, p } = await abrir(pagina, "dark");
+      const hrefs = await p.evaluate(() =>
+        [...document.querySelectorAll("a[href]")].map((a) => a.href).filter((h) => h.startsWith(location.origin)),
+      );
+      for (const h of new Set(hrefs)) {
+        const resposta = await p.request.get(h.split("#")[0]);
+        assert.equal(resposta.status(), 200, `${pagina} → ${h}`);
+      }
+      await ctx.close();
+    }
+  });
+
+  test("nenhuma requisição sai do próprio site e não há cookies nem armazenamento", async () => {
+    const { ctx, p } = await abrir("index.html", "dark");
+    const externas = [];
+    p.on("request", (r) => !r.url().startsWith(origem) && externas.push(r.url()));
+    await p.goto(`${origem}/teste.html`);
+    await rodarExemplo(p);
+    const [cookies, local, sessao] = await p.evaluate(() => [document.cookie, localStorage.length, sessionStorage.length]);
+    await ctx.close();
+    assert.deepEqual(externas, []);
+    assert.equal(cookies, "");
+    assert.equal(local + sessao, 0);
+  });
+});
