@@ -20,6 +20,18 @@ Fora o modelo: baixar e extrair o Ollama leva cerca de 15 s e ocupa 2,4 GB no di
 
 Na primeira rodada o prompt só trazia a explicação geral. O 1,5B **errou 2 de 5**: disse que a variável `frete` "não estava declarada" (o problema era `total` nunca usado) e inventou um efeito para o valor padrão mutável ("todas as tarefas anteriores serão marcadas"). Com a **mensagem exata da ferramenta** e os três campos da lição no prompt, os erros sumiram. Moral: a IA pequena só presta quando a resposta é ancorada em fatos que o Farol já tem. Mesmo assim ela pode errar, por isso toda nota vem rotulada.
 
+## Rodada real no GitHub (PR de demonstração [#31](https://github.com/islan-max/farol/pull/31))
+
+A Action rodou com `ia: ollama` sobre três apontamentos (`B006`, `F841`, `E722`), com o 1,5B. O download do Ollama e do modelo e a geração das 3 notas cabem em cerca de 1 minuto de job. A **qualidade foi mista**, e vale ser dito:
+
+| Apontamento | Primeira versão do prompt | Depois de exigir que siga o "Como corrigir" |
+| --- | --- | --- |
+| `B006` (lista como padrão) | Correta, mas repete a lição | Correta e mais específica (cita o parâmetro `feitas`) |
+| `F841` (variável não usada) | Imprecisa: diz que `total` "é criada e usada", mas sugere `return total` | Igual |
+| `E722` (`except:` sem tipo) | **Enganosa**: mandava capturar `KeyboardInterrupt` e `SystemExit`, o contrário da lição | Segue a lição ("nomeie o erro que você espera"), mas a primeira frase ainda afirma que o erro "é KeyboardInterrupt ou SystemExit" |
+
+Ou seja: o 1,5B acertou bem as cinco notas da medição controlada, mas em uso real errou parte. O rótulo "pode errar" e a lição escrita à mão ao lado de cada nota existem por isso. Quem quiser notas melhores deve usar o 7B (`modelo: qwen2.5-coder:7b`), a um custo de 15 a 37 s por nota; **não medi o 7B nessa rodada real**.
+
 ## Decisão
 
 - Modelo padrão: `qwen2.5-coder:1.5b` (rápido, 0,6 GB, cabe até no runner de repositório privado). O 3B não foi melhor. O 7B escreve melhor, mas custa 4,7 GB de RAM e de 15 a 37 s por nota (até 6 minutos com 10 comentários): serve para quem quiser, via `modelo:`.
