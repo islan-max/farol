@@ -43,5 +43,14 @@
     "permalink": "https://github.com/django/django/blob/817df1c4d6d38f416460d7d9354d7deab9d35139/django/db/backends/mysql/introspection.py#L284-L288",
     "trecho": "                c.constraint_type != 'CHECK' AND\n                kc.table_name = %s\n            ORDER BY kc.`ordinal_position`\n        \"\"\"\n        cursor.execute(name_query, [table_name])",
     "porque": "O valor entra pelo marcador %s e é entregue separado, na lista do execute(); a consulta nunca é montada juntando texto."
+  },
+  {
+    "id": "B904-1",
+    "regra": "B904",
+    "repo": "django/django",
+    "licenca": "BSD-3-Clause",
+    "permalink": "https://github.com/django/django/blob/817df1c4d6d38f416460d7d9354d7deab9d35139/django/tasks/base.py#L62-L66",
+    "trecho": "            func = import_string(func_path)\n            kwargs[\"func\"] = func.func\n        except (ImportError, AttributeError) as e:\n            msg = f\"Expected {func_path!r} to point to a Task instance.\"\n            raise ValueError(msg) from e",
+    "porque": "O erro novo (ValueError) é levantado com from e, então o traceback aponta o ImportError ou AttributeError que o causou."
   }
 ]

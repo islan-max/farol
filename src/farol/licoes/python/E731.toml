@@ -1,0 +1,31 @@
+codigo = "E731"
+ferramenta = "ruff"
+titulo = "Não atribua uma `lambda` a um nome"
+nivel = "iniciante"
+o_que_e = """
+`dobro = lambda x: x * 2` cria uma função anônima e, na mesma linha, dá um nome a ela.
+"""
+por_que_importa = """
+Uma `def` faz exatamente o mesmo e é melhor: o traceback mostra o nome da função (com `lambda` aparece \
+`<lambda>`), dá para escrever docstring e anotações de tipo, e é o jeito que quem lê espera encontrar.
+"""
+como_corrigir = """
+Troque por `def`. A `lambda` continua útil quando é passada direto, como em \
+`sorted(pessoas, key=lambda p: p.idade)`.
+"""
+antes = '''
+dobro = lambda x: x * 2
+'''
+depois = '''
+def dobro(x):
+    return x * 2
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra E731 no ruff"
+url = "https://docs.astral.sh/ruff/rules/lambda-assignment/"
+
+[[docs]]
+titulo = "PEP 8: recomendações de programação"
+url = "https://peps.python.org/pep-0008/#programming-recommendations"

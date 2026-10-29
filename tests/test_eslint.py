@@ -15,13 +15,14 @@ def codigos(achados):
 
 
 def test_ha_pelo_menos_cinco_licoes_de_javascript():
-    assert len(JS) >= 5
+    assert len(JS) >= 10
 
 
 @pytest.mark.parametrize("lc", JS, ids=lambda lc: lc.codigo)
 def test_antes_dispara_a_regra_e_depois_nao(lc):
-    assert lc.codigo in codigos(analisar("x.js", lc.antes)), "o 'antes' não dispara a regra"
-    assert lc.codigo not in codigos(analisar("x.js", lc.depois)), "o 'depois' ainda dispara"
+    arquivo = f"x.{lc.extensao or 'js'}"
+    assert lc.codigo in codigos(analisar(arquivo, lc.antes)), "o 'antes' não dispara a regra"
+    assert lc.codigo not in codigos(analisar(arquivo, lc.depois)), "o 'depois' ainda dispara"
 
 
 @pytest.mark.parametrize("lc", JS, ids=lambda lc: lc.codigo)
@@ -69,3 +70,20 @@ def test_sem_node_o_arquivo_vira_nao_revisado_com_motivo(tmp_path, monkeypatch):
     monkeypatch.setattr(modulo.shutil, "which", lambda _nome: None)
     with pytest.raises(FerramentaIndisponivel, match="Node.js"):
         analisar("a.js", "var a = 1;\n")
+
+
+def test_no_explicit_any_so_vale_para_typescript_e_aponta_para_a_doc_certa():
+    fonte = "export function f(x: any) {\n  return x;\n}\n"
+    (achado,) = analisar("a.ts", fonte)
+    assert achado.codigo == "no-explicit-any"
+    assert achado.url == "https://typescript-eslint.io/rules/no-explicit-any/"
+    assert analisar("a.js", "export function f(x) {\n  return x;\n}\n") == []
+
+
+def test_mudar_a_configuracao_muda_a_pasta_de_cache(tmp_path, monkeypatch):
+    for nome in modulo.ARQUIVOS:
+        (tmp_path / nome).write_text("v1")
+    monkeypatch.setattr(modulo, "FONTE", tmp_path)
+    antes = modulo._cache()
+    (tmp_path / "farol.config.mjs").write_text("v2")
+    assert modulo._cache() != antes

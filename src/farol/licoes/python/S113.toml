@@ -1,0 +1,40 @@
+codigo = "S113"
+ferramenta = "ruff"
+titulo = "Chamada de rede sem `timeout` pode travar para sempre"
+nivel = "intermediario"
+o_que_e = """
+Uma chamada como `requests.get(url)` sem o argumento `timeout`: a biblioteca espera a resposta por tempo \
+indeterminado.
+"""
+por_que_importa = """
+Se o servidor do outro lado não responde, o seu programa fica parado ali, e num site isso prende a \
+requisição de quem está acessando. O `requests` não tem limite de tempo por padrão, então o travamento \
+acontece justamente no dia em que o serviço externo cai.
+"""
+como_corrigir = """
+Passe `timeout=` em segundos, como em `requests.get(url, timeout=10)`. Também dá para separar o tempo de \
+conexão do de leitura com uma tupla: `timeout=(3, 10)`. Trate o erro `requests.Timeout`.
+"""
+antes = '''
+import requests
+
+
+def baixar(url):
+    return requests.get(url).text
+'''
+depois = '''
+import requests
+
+
+def baixar(url):
+    return requests.get(url, timeout=10).text
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra S113 no ruff"
+url = "https://docs.astral.sh/ruff/rules/request-without-timeout/"
+
+[[docs]]
+titulo = "Documentação do requests: timeouts"
+url = "https://requests.readthedocs.io/en/latest/user/quickstart/#timeouts"

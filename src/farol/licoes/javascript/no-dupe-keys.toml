@@ -1,0 +1,33 @@
+codigo = "no-dupe-keys"
+ferramenta = "eslint"
+linguagem = "javascript"
+titulo = "Chave repetida em um objeto"
+nivel = "iniciante"
+o_que_e = """
+O mesmo nome de propriedade aparece duas vezes dentro de um objeto literal.
+"""
+por_que_importa = """
+Só vale o **último** valor: a primeira ocorrência é descartada em silêncio. Quem lê o código acredita que a \
+porta é 3000, e o programa usa 8080. Costuma ser sobra de copiar e colar um bloco de configuração.
+"""
+como_corrigir = """
+Apague a chave repetida ou renomeie uma delas, conforme o que você quis dizer.
+"""
+antes = '''
+export const config = {
+  porta: 3000,
+  host: "localhost",
+  porta: 8080,
+};
+'''
+depois = '''
+export const config = {
+  porta: 8080,
+  host: "localhost",
+};
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra no-dupe-keys no ESLint"
+url = "https://eslint.org/docs/latest/rules/no-dupe-keys"

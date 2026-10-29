@@ -19,7 +19,7 @@ def _codigos_do_ruff(fonte: str) -> set[str | None]:
 
 
 def test_catalogo_nao_esta_vazio():
-    assert len(PYTHON) >= 12
+    assert len(PYTHON) >= 17
 
 
 @pytest.mark.parametrize("lc", PYTHON, ids=lambda lc: lc.codigo)

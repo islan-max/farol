@@ -47,7 +47,7 @@ uvx --from git+https://github.com/islan-max/farol farol explicar E722
 - Olha **só as linhas que você alterou**. Problema que já existia não vira comentário.
 - Comenta cada regra **uma vez** por arquivo, com no máximo **10 comentários** por PR; o resto vai agrupado. Segurança vem primeiro.
 - As regras são as do Farol; a configuração de lint do seu repositório é ignorada de propósito.
-- Hoje: **12 lições de Python** e **5 de JavaScript/TypeScript**; 5 delas têm exemplo real de projeto aberto, com link para o commit e licença.
+- Hoje: **17 lições de Python** e **10 de JavaScript/TypeScript**; 6 delas têm exemplo real de projeto aberto, com link para o commit e licença.
 - Código sem lição escrita não é apontado. Se uma ferramenta acha algo que o Farol ainda não explica, ele não inventa explicação.
 - Fora do MVP, de propósito: IA local e resumo entre PRs. Veja [docs/fase-2.md](docs/fase-2.md).
 

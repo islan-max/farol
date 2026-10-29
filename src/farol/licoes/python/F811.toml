@@ -1,0 +1,37 @@
+codigo = "F811"
+ferramenta = "ruff"
+titulo = "Nome definido duas vezes: a primeira definição nunca é usada"
+nivel = "intermediario"
+o_que_e = """
+Você define duas funções (ou uma função e um import) com o mesmo nome, e a primeira é substituída antes de \
+ser usada.
+"""
+por_que_importa = """
+Só a última definição existe, então a primeira é código morto. O erro costuma ser copiar e colar uma função \
+sem trocar o nome; em testes é pior: o primeiro teste **deixa de rodar sem avisar**, e você acredita que \
+aquele caso está coberto.
+"""
+como_corrigir = """
+Renomeie uma das duas ou apague a que não vale. Em testes, dê um nome diferente e descritivo a cada função.
+"""
+antes = '''
+def testar_soma():
+    assert 1 + 1 == 2
+
+
+def testar_soma():
+    assert 2 + 2 == 4
+'''
+depois = '''
+def testar_soma_de_uns():
+    assert 1 + 1 == 2
+
+
+def testar_soma_de_dois():
+    assert 2 + 2 == 4
+'''
+exemplos = []
+
+[[docs]]
+titulo = "Regra F811 no ruff"
+url = "https://docs.astral.sh/ruff/rules/redefined-while-unused/"
