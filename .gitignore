@@ -9,3 +9,5 @@ build/
 *.egg-info/
 node_modules/
 site/_build/
+_site/
+site/node_modules/

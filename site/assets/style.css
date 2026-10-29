@@ -1,0 +1,403 @@
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/inter-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/inter-600.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/jetbrains-mono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/jetbrains-mono-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* Tema escuro é o padrão; o claro segue a preferência do sistema. */
+:root {
+  color-scheme: dark;
+  --fundo: #0f1419;
+  --superficie: #151c24;
+  --borda: #2f3b49;
+  --texto: #d8dee9;
+  --suave: #a3afbd;
+  --ambar: #ffc857;
+  --ambar-texto: #ffc857;
+  --sobre-ambar: #1b2430;
+  --verde: #3fb8af;
+  --link: #6dd6cd;
+  --foco: #ffc857;
+  --codigo-fundo: #0b1015;
+  --erro: #ff9e92;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --fundo: #fafaf7;
+    --superficie: #ffffff;
+    --borda: #c9d1da;
+    --texto: #1b2430;
+    --suave: #4a5868;
+    --ambar: #ffc857;
+    --ambar-texto: #8a5400;
+    --sobre-ambar: #1b2430;
+    --verde: #0b6b65;
+    --link: #0a5f59;
+    --foco: #0b5fa5;
+    --codigo-fundo: #f1f3f0;
+    --erro: #a32a1c;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  font-size: 100%;
+}
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+code,
+pre,
+textarea {
+  font-family: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+code {
+  background: var(--codigo-fundo);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+}
+pre {
+  background: var(--codigo-fundo);
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem 0 1rem;
+  overflow-x: auto;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  overflow-wrap: normal;
+}
+a {
+  color: var(--link);
+  text-underline-offset: 0.2em;
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+  font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  font-weight: 700;
+}
+h1 {
+  font-size: clamp(1.9rem, 5vw, 2.8rem);
+  margin: 0 0 1rem;
+}
+h2 {
+  font-size: 1.45rem;
+  margin: 2.5rem 0 0.75rem;
+}
+h3 {
+  font-size: 1.15rem;
+  margin: 1.5rem 0 0.5rem;
+}
+p {
+  margin: 0 0 1rem;
+}
+.destaque {
+  color: var(--ambar-texto);
+}
+.suave {
+  color: var(--suave);
+}
+
+.pular {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  background: var(--ambar);
+  color: var(--sobre-ambar);
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  z-index: 10;
+}
+.pular:focus {
+  top: 1rem;
+}
+
+.contorno {
+  width: min(100% - 2rem, 62rem);
+  margin-inline: auto;
+}
+.texto {
+  max-width: 44rem;
+}
+
+header.topo {
+  border-bottom: 1px solid var(--borda);
+}
+header.topo .contorno {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding-block: 0.75rem;
+}
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--texto);
+  font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  font-weight: 700;
+  font-size: 1.25rem;
+  text-decoration: none;
+  min-height: 44px;
+}
+.marca img {
+  width: 32px;
+  height: 32px;
+}
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--texto);
+}
+nav a[aria-current="page"] {
+  color: var(--ambar-texto);
+  font-weight: 600;
+}
+
+main {
+  padding-block: 2.5rem 4rem;
+}
+.heroi {
+  padding-block: 1rem 0.5rem;
+}
+.heroi .lead {
+  font-size: 1.25rem;
+  color: var(--suave);
+  max-width: 40rem;
+}
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.5rem 1.25rem;
+  border: 2px solid var(--ambar-texto);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--texto);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.botao:hover {
+  background: color-mix(in srgb, var(--ambar) 18%, transparent);
+}
+.botao.primario {
+  border-color: var(--ambar);
+  background: var(--ambar);
+  color: var(--sobre-ambar);
+}
+.botao.primario:hover {
+  background: color-mix(in srgb, var(--ambar) 85%, white);
+}
+
+.cartao {
+  background: var(--superficie);
+  border: 1px solid var(--borda);
+  border-left: 4px solid var(--ambar);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+}
+.cartao > :first-child {
+  margin-top: 0;
+}
+.cartao > :last-child {
+  margin-bottom: 0;
+}
+.cartao h2,
+.cartao h3 {
+  margin-top: 0;
+}
+.cartao .onde {
+  color: var(--suave);
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+.exemplo-real {
+  border-left-color: var(--verde);
+}
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+.grade .cartao {
+  margin: 0;
+}
+.nivel {
+  display: inline-block;
+  border: 1px solid var(--borda);
+  border-radius: 999px;
+  padding: 0 0.6rem;
+  font-size: 0.85rem;
+  color: var(--suave);
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+ol.passos {
+  padding-left: 1.25rem;
+}
+ol.passos li {
+  margin-bottom: 0.5rem;
+}
+ul.lista {
+  padding-left: 1.25rem;
+}
+.lista-licoes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.lista-licoes li {
+  border-bottom: 1px solid var(--borda);
+}
+.lista-licoes a {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  align-items: baseline;
+  padding: 0.7rem 0;
+  min-height: 44px;
+  color: var(--texto);
+  text-decoration: none;
+}
+.lista-licoes a:hover .titulo-licao {
+  text-decoration: underline;
+}
+.codigo-regra {
+  font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  color: var(--ambar-texto);
+  min-width: 4.5rem;
+}
+
+/* Teste agora */
+label.rotulo {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+textarea {
+  width: 100%;
+  min-height: 16rem;
+  padding: 0.75rem;
+  background: var(--codigo-fundo);
+  color: var(--texto);
+  border: 2px solid var(--borda);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+textarea:focus-visible {
+  border-color: var(--foco);
+}
+.status {
+  min-height: 1.65rem;
+  color: var(--suave);
+}
+.status.erro {
+  color: var(--erro);
+  font-weight: 600;
+}
+#resultado:focus {
+  outline: none;
+}
+#resultado h2:focus {
+  outline: 3px solid var(--foco);
+  outline-offset: 4px;
+}
+.linha-do-usuario {
+  font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  background: var(--codigo-fundo);
+  border-radius: 4px;
+  padding: 0.35rem 0.6rem;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0 0 0.75rem;
+}
+
+footer.rodape {
+  border-top: 1px solid var(--borda);
+  padding-block: 1.5rem 2.5rem;
+  color: var(--suave);
+  font-size: 0.95rem;
+}
+footer.rodape a {
+  color: var(--link);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
