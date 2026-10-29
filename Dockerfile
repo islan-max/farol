@@ -1,6 +1,6 @@
 # Imagem do Farol para usar a CLI sem instalar uv nem Node.js:
 #   docker run --rm -v "$PWD:/repo" ghcr.io/islan-max/farol revisar
-FROM node:22-bookworm-slim AS node
+FROM node:25-bookworm-slim AS node
 FROM ghcr.io/astral-sh/uv:0.12.19 AS uv
 
 FROM python:3.12-slim-bookworm AS build
