@@ -3,7 +3,7 @@
 FROM node:22-bookworm-slim AS node
 FROM ghcr.io/astral-sh/uv:0.13.6 AS uv
 
-FROM python:3.12-slim-bookworm AS build
+FROM python:3.15-slim-bookworm AS build
 COPY --from=uv /uv /usr/local/bin/uv
 WORKDIR /app
 COPY pyproject.toml uv.lock README.md LICENSE ./
@@ -11,7 +11,7 @@ COPY src ./src
 # Instala o Farol (sem as dependências de desenvolvimento), fixado pelo uv.lock.
 RUN uv sync --locked --no-dev --no-editable
 
-FROM python:3.12-slim-bookworm
+FROM python:3.15-slim-bookworm
 LABEL org.opencontainers.image.title="Farol" \
       org.opencontainers.image.description="Revisão de pull request que ensina, em português do Brasil" \
       org.opencontainers.image.source="https://github.com/islan-max/farol" \
